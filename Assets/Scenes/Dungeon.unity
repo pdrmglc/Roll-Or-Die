@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 220763239}
   - component: {fileID: 220763238}
   - component: {fileID: 220763237}
+  - component: {fileID: 220763241}
   m_Layer: 0
   m_Name: WorldTileMap
   m_TagString: WorldTileMap
@@ -225,7 +226,7 @@ TilemapRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 4
+  m_SortingOrder: -1
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -272,6 +273,18 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!114 &220763241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 220763235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59195ac4ac6e9bf40964146819a1fb78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Pathfinding
 --- !u!1 &229389524
 GameObject:
   m_ObjectHideFlags: 0
@@ -1354,7 +1367,7 @@ TilemapRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -1776,6 +1789,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   gridManager: {fileID: 220763237}
+  highlightTile: {fileID: 11400000, guid: 11da283d37f4aac42bd38a3951aeea48, type: 2}
 --- !u!1 &722017326
 GameObject:
   m_ObjectHideFlags: 0
@@ -1792,7 +1806,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!156049354 &722017327
 Grid:
   m_ObjectHideFlags: 0

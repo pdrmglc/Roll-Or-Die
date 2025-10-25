@@ -11,14 +11,14 @@ public class GridManager : MonoBehaviour
     [SerializeField] private TileSet tileSet;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
         tilemap = GetComponent<Tilemap>();
         gridScript = GetComponent<GridScript>();
-        gridScript.Init(8, 5);
-        Set(2, 2, 1);
-        Set(3, 2, 2);
-        Set(5, 2, 3);
+        gridScript.Init(7, 4);
+        // Set(2, 2, 1);
+        // Set(3, 2, 2);
+        // Set(5, 2, 3);
         UpdateTileMap();
     }
 

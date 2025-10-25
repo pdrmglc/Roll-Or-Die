@@ -43,6 +43,11 @@ public class GridScript : MonoBehaviour
         return true;
     }
 
+    internal bool CheckWalkable(int x, int y)
+    {
+        return grid[x, y] == 0;
+    }
+
     public int GetLength()
     {
         return length;
