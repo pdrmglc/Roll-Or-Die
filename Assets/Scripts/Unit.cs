@@ -28,7 +28,13 @@ public class Unit : MonoBehaviour, IPointerDownHandler
     private SpriteRenderer _spriteRenderer;
     private float _originalSpriteScaleX;
 
+    private Animator animator;
+
+
     void Start() {
+
+        animator = GetComponentInChildren<Animator>();
+
         stats = new UnitStats(Random.Range(0, 100), Random.Range(0, 100));
         movementRange = Mathf.RoundToInt(stats.speed * 0.1f);
         attackRange = Mathf.RoundToInt(stats.perception * 0.05f);
@@ -77,42 +83,50 @@ public class Unit : MonoBehaviour, IPointerDownHandler
     public void MoveTo(Vector3 position, Vector2Int gridPos)
     {
         // ajusta a face antes de iniciar o movimento
-        UpdateFacingTowards(position);
+        // UpdateFacingTowards(position);
+
+        Vector2 direction = (position - transform.position).normalized;
+        if (animator != null)
+        {
+            animator.SetBool("IsWalking", true);
+            animator.SetFloat("InputX", direction.x);
+            animator.SetFloat("InputY", direction.y);
+        }
 
         targetPosition = position;
         gridPosition = gridPos;
         isMoving = true;
     }
 
-    // novo método para definir a orientação esquerda/direita
-    private void UpdateFacingTowards(Vector3 worldTargetPosition)
-    {
-        if (spriteTransform == null) return;
-        var cam = Camera.main;
-        if (cam == null) return;
+    // // novo método para definir a orientação esquerda/direita
+    // private void UpdateFacingTowards(Vector3 worldTargetPosition)
+    // {
+    //     if (spriteTransform == null) return;
+    //     var cam = Camera.main;
+    //     if (cam == null) return;
 
-        // converte posições para tela e checa a diferença horizontal em pixels
-        Vector3 screenCurrent = cam.WorldToScreenPoint(transform.position);
-        Vector3 screenTarget = cam.WorldToScreenPoint(worldTargetPosition);
-        float dx = screenTarget.x - screenCurrent.x;
+    //     // converte posições para tela e checa a diferença horizontal em pixels
+    //     Vector3 screenCurrent = cam.WorldToScreenPoint(transform.position);
+    //     Vector3 screenTarget = cam.WorldToScreenPoint(worldTargetPosition);
+    //     float dx = screenTarget.x - screenCurrent.x;
 
-        // threshold em pixels para evitar flips em movimentos quase verticais/diagonais
-        if (Mathf.Abs(dx) < 5f) return;
+    //     // threshold em pixels para evitar flips em movimentos quase verticais/diagonais
+    //     if (Mathf.Abs(dx) < 5f) return;
 
-        bool faceLeft = dx < 0f;
+    //     bool faceLeft = dx < 0f;
 
-        // prefira usar flipX se houver SpriteRenderer, caso contrário ajuste localScale.x
-        if (_spriteRenderer != null)
-        {
-            _spriteRenderer.flipX = faceLeft;
-        }
-        else
-        {
-            Vector3 s = spriteTransform.localScale;
-            s.x = Mathf.Abs(_originalSpriteScaleX) * (faceLeft ? -1f : 1f);
-            spriteTransform.localScale = s;
-        }
-    }
+    //     // prefira usar flipX se houver SpriteRenderer, caso contrário ajuste localScale.x
+    //     if (_spriteRenderer != null)
+    //     {
+    //         _spriteRenderer.flipX = faceLeft;
+    //     }
+    //     else
+    //     {
+    //         Vector3 s = spriteTransform.localScale;
+    //         s.x = Mathf.Abs(_originalSpriteScaleX) * (faceLeft ? -1f : 1f);
+    //         spriteTransform.localScale = s;
+    //     }
+    // }
 
     private void HandleMovement()
     {
@@ -123,6 +137,13 @@ public class Unit : MonoBehaviour, IPointerDownHandler
         {
             transform.position = targetPosition;
             isMoving = false;
+
+            if (animator != null)
+                {
+                    animator.SetBool("IsWalking", false);
+                    animator.SetFloat("LastInputX", 0);
+                    animator.SetFloat("LastInputY", -1);
+                }
 
             movementLeft -= path[0].moveCost;
 

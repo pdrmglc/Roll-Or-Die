@@ -71,6 +71,8 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
             if (inMoveRange)
             {
+                Tile unitTile = gridManager.GetTile(Player.selectedUnit.transform.position);
+                Player.selectedUnit.gridPosition = unitTile.gridPosition;
                 gridManager.GetTile(Player.selectedUnit.gridPosition).isOccupied = false;
                 if (gridManager.GetTile(Player.selectedUnit.gridPosition) != this)
                 {

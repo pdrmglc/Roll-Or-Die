@@ -78,7 +78,6 @@ public class Player : MonoBehaviour
             unit.gridPosition = unitTile.gridPosition;
             unit.transform.position = unitTile.transform.position;
             unitTile.isOccupied = true;
-            Debug.Log($"Unidade {unit.name} posicionada na tile {unitTile.gridPosition}.");
         }
     }
 
