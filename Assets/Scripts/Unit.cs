@@ -80,88 +80,71 @@ public class Unit : MonoBehaviour, IPointerDownHandler
         
     }
 
-    public void MoveTo(Vector3 position, Vector2Int gridPos)
+    public void MoveTo(Vector3 targetPos, Vector2Int gridPos)
     {
-        // ajusta a face antes de iniciar o movimento
-        // UpdateFacingTowards(position);
-
-        Vector2 direction = (position - transform.position).normalized;
-        if (animator != null)
-        {
-            animator.SetBool("IsWalking", true);
-            animator.SetFloat("InputX", direction.x);
-            animator.SetFloat("InputY", direction.y);
-        }
-
-        targetPosition = position;
+        targetPosition = targetPos;
         gridPosition = gridPos;
         isMoving = true;
+
+        if (animator != null)
+        {
+            // Ativa animação de movimento
+            animator.SetBool("IsWalking", true);
+
+            // Calcula a direção do movimento
+            Vector3 direction = (targetPosition - transform.position).normalized;
+
+            // Atualiza os parâmetros da animação (para andar e olhar na direção certa)
+            animator.SetFloat("InputX", direction.x);
+            animator.SetFloat("InputY", direction.y);
+
+            // Também guarda a última direção (para quando parar)
+            animator.SetFloat("LastInputX", direction.x);
+            animator.SetFloat("LastInputY", direction.y);
+        }
     }
 
-    // // novo método para definir a orientação esquerda/direita
-    // private void UpdateFacingTowards(Vector3 worldTargetPosition)
-    // {
-    //     if (spriteTransform == null) return;
-    //     var cam = Camera.main;
-    //     if (cam == null) return;
 
-    //     // converte posições para tela e checa a diferença horizontal em pixels
-    //     Vector3 screenCurrent = cam.WorldToScreenPoint(transform.position);
-    //     Vector3 screenTarget = cam.WorldToScreenPoint(worldTargetPosition);
-    //     float dx = screenTarget.x - screenCurrent.x;
-
-    //     // threshold em pixels para evitar flips em movimentos quase verticais/diagonais
-    //     if (Mathf.Abs(dx) < 5f) return;
-
-    //     bool faceLeft = dx < 0f;
-
-    //     // prefira usar flipX se houver SpriteRenderer, caso contrário ajuste localScale.x
-    //     if (_spriteRenderer != null)
-    //     {
-    //         _spriteRenderer.flipX = faceLeft;
-    //     }
-    //     else
-    //     {
-    //         Vector3 s = spriteTransform.localScale;
-    //         s.x = Mathf.Abs(_originalSpriteScaleX) * (faceLeft ? -1f : 1f);
-    //         spriteTransform.localScale = s;
-    //     }
-    // }
+    
 
     private void HandleMovement()
     {
         if (!isMoving) return;
+        if (!inCombatMode) return;
 
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+
         if (Vector3.Distance(transform.position, targetPosition) < STOPPING_DISTANCE)
         {
             transform.position = targetPosition;
             isMoving = false;
 
             if (animator != null)
-                {
-                    animator.SetBool("IsWalking", false);
-                    animator.SetFloat("LastInputX", 0);
-                    animator.SetFloat("LastInputY", -1);
-                }
+            {
+                // Só desliga a animação, sem mudar LastInput
+                animator.SetBool("IsWalking", false);
+            }
 
             movementLeft -= path[0].moveCost;
-
             path.RemoveAt(0);
+
             if (path.Count > 0)
             {
+                // Continua para o próximo tile no caminho
                 MoveTo(path[0].transform.position, path[0].gridPosition);
             }
             else
             {
+                // Terminou o caminho, volta pro controle do jogador
                 owner.ChangeSelectUnit(this);
             }
         }
-
     }
+
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (!inCombatMode) return;
         if (owner != null)
         {
             owner.ChangeSelectUnit(this);

@@ -6,6 +6,8 @@ public class PlayerMovement : MonoBehaviour
     private float moveSpeed = 5f;
     private Rigidbody2D rb;
     private Vector2 moveInput;
+    public bool canMove = true;
+
 
     private Animator animator;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -23,6 +25,12 @@ public class PlayerMovement : MonoBehaviour
 
     public void Move(InputAction.CallbackContext context)
     {
+        if (!canMove)
+        {
+            animator.SetBool("IsWalking", false);
+            rb.linearVelocity = Vector2.zero;
+            return;
+        }
         animator.SetBool("IsWalking", true);
         
 

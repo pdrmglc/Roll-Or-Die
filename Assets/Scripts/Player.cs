@@ -34,10 +34,22 @@ public class Player : MonoBehaviour
         foreach (Unit unit in playerUnits)
         {
             unit.SetCombatMode(inCombatMode);
+
+            // 🔹 Ativa/desativa o script PlayerMovement conforme o modo
+            PlayerMovement pm = unit.GetComponent<PlayerMovement>();
+            if (pm != null)
+                {
+                    pm.canMove = !inCombatMode;
+                }
         }
 
         if (inCombatMode)
         {
+            gridManager.ResetGridHighlights();
+            gridManager.ClearTileOccupations();
+            // Ativa a movimentação por grid
+            SnapUnits();
+
             // Primeiro mostra a UI
             turnManager.SetCombatMode(true);
             // Depois mostra o banner inicial
@@ -45,6 +57,8 @@ public class Player : MonoBehaviour
         }
         else
         {
+            // Ativa a movimentação livre
+            // Desativa a movimentação por grid
             // Se sair do modo combate, esconde tudo
             turnManager.SetCombatMode(false);
         }

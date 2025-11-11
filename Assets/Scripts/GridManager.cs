@@ -169,6 +169,22 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    public void ClearTileOccupations()
+    {
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                Tile tile = map[x, y];
+                if (tile != null)
+                {
+                    tile.isOccupied = false;
+                }
+            }
+        }
+    }
+
+
     public List<Tile> GetHighlightRange(Vector2Int start, int moveRange, int attackRange)
     {
         if (moveRange == int.MaxValue)
