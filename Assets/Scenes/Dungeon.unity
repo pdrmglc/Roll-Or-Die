@@ -2558,37 +2558,6 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!1 &1312567788
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1312567789}
-  m_Layer: 0
-  m_Name: TileContainer
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1312567789
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1312567788}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1317509895
 GameObject:
   m_ObjectHideFlags: 0
@@ -3202,6 +3171,7 @@ MonoBehaviour:
   width: 20
   height: 20
   tilePrefab: {fileID: 7142272957316629534, guid: ca0262a8dcea995408956c03813f9e36, type: 3}
+  useTilemapGenerator: 0
 --- !u!4 &1852550311
 Transform:
   m_ObjectHideFlags: 0
@@ -5499,11 +5469,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1968529167}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70bfa9d21b2140f43aea9200229367a2, type: 3}
+  m_Script: {fileID: 11500000, guid: cbbbb48e01e44b0419b8e18ba5fde2bb, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TilemapDebugger
+  m_EditorClassIdentifier: Assembly-CSharp::TilemapGridGenerator
   tilePrefab: {fileID: 7142272957316629534, guid: ca0262a8dcea995408956c03813f9e36, type: 3}
-  tileParent: {fileID: 1312567789}
+  gridManager: {fileID: 1852550310}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -5516,4 +5486,3 @@ SceneRoots:
   - {fileID: 1384037005}
   - {fileID: 1812117737}
   - {fileID: 19150261}
-  - {fileID: 1312567789}

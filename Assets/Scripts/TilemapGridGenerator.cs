@@ -54,7 +54,7 @@ public class TilemapGridGenerator : MonoBehaviour
                 {
                     Vector2Int gridPos = new Vector2Int(pos.x - minX, pos.y - minY);
                     tileScript.gridPosition = gridPos;
-                    tileScript.originalColor = (gridPos.x + gridPos.y) % 2 == 0 ? Color.white : Color.gray;
+                    // tileScript.originalColor = (gridPos.x + gridPos.y) % 2 == 0 ? Color.white : Color.gray;
                 }
 
                 spawned.name = $"Tile ({pos.x},{pos.y}) [Grid: {tileScript?.gridPosition}]";
