@@ -41,16 +41,17 @@ public class PlayerMovement : MonoBehaviour
 
         if (context.canceled)
         {
-            moveInput = Vector2.zero;
-            animator.SetBool("IsWalking", false);
+            // Salva a última direção antes de zerar
             animator.SetFloat("LastInputX", moveInput.x);
             animator.SetFloat("LastInputY", moveInput.y);
+            moveInput = Vector2.zero;
+            animator.SetBool("IsWalking", false);
         }
         else
         {
             moveInput = context.ReadValue<Vector2>();
+            animator.SetFloat("InputX", moveInput.x);
+            animator.SetFloat("InputY", moveInput.y);
         }
-        animator.SetFloat("InputX", moveInput.x);
-        animator.SetFloat("InputY", moveInput.y);
     }
 }
