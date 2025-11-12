@@ -64,6 +64,16 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     public void OnPointerDown(PointerEventData eventData)
     {
         GridManager gridManager = GetComponentInParent<GridManager>();
+        if (gridManager == null)
+        {
+            gridManager = FindAnyObjectByType<GridManager>();
+        }
+        
+        if (gridManager == null)
+        {
+            Debug.LogError("GridManager não encontrado!");
+            return;
+        }
 
         if (Player.selectedUnit)
         {

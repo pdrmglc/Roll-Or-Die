@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         gridManager = FindAnyObjectByType<GridManager>();
-        SnapUnits();
+
     }
 
     void Update()
@@ -87,8 +87,12 @@ public class Player : MonoBehaviour
     {
         foreach (Unit unit in playerUnits)
         {
-
             Tile unitTile = gridManager.GetTile(unit.transform.position);
+            if (unitTile == null)
+            {
+                Debug.LogWarning($"SnapUnits: Não foi possível encontrar tile para unidade {unit.name} na posição {unit.transform.position}");
+                continue;
+            }
             unit.gridPosition = unitTile.gridPosition;
             unit.transform.position = unitTile.transform.position;
             unitTile.isOccupied = true;

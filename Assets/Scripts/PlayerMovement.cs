@@ -5,7 +5,7 @@ public class PlayerMovement : MonoBehaviour
 {
     private float moveSpeed = 5f;
     private Rigidbody2D rb;
-    private Vector2 moveInput;
+    private Vector2 moveInput = Vector2.zero;
     public bool canMove = true;
 
 
@@ -20,6 +20,11 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!canMove)
+        {
+            rb.linearVelocity = Vector2.zero;
+            return;
+        }
         rb.linearVelocity = moveInput * moveSpeed;
     }
 
@@ -36,11 +41,15 @@ public class PlayerMovement : MonoBehaviour
 
         if (context.canceled)
         {
+            moveInput = Vector2.zero;
             animator.SetBool("IsWalking", false);
             animator.SetFloat("LastInputX", moveInput.x);
             animator.SetFloat("LastInputY", moveInput.y);
         }
-        moveInput = context.ReadValue<Vector2>();
+        else
+        {
+            moveInput = context.ReadValue<Vector2>();
+        }
         animator.SetFloat("InputX", moveInput.x);
         animator.SetFloat("InputY", moveInput.y);
     }

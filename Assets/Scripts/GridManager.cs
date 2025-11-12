@@ -9,20 +9,57 @@ public class GridManager : MonoBehaviour
     public int width = 20;
     public int height = 20;
     public GameObject tilePrefab;
+    public bool useTilemapGenerator = false;
     private Tile[,] map;
+    private bool gridGenerated = false;
+    
     void Awake()
     {
         map = new Tile[width, height];
-        GenerateGrid();
+        CheckForTilemapGenerator();
+    }
+    
+    void Start()
+    {
+        if (!gridGenerated)
+        {
+            CheckForTilemapGenerator();
+        }
+    }
+    
+    private void CheckForTilemapGenerator()
+    {
+        TilemapGridGenerator tilemapGenerator = FindAnyObjectByType<TilemapGridGenerator>();
+        bool shouldUseGenerator = useTilemapGenerator || (tilemapGenerator != null);
+        
+        if (tilemapGenerator != null && !useTilemapGenerator)
+        {
+            useTilemapGenerator = true;
+        }
+        
+        if (!shouldUseGenerator && !gridGenerated)
+        {
+            GenerateGrid();
+            gridGenerated = true;
+        }
     }
 
     public void GenerateGrid()
     {
+        if (gridGenerated)
+        {
+            return;
+        }
+        
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                Vector3 tilePosition = new Vector3(x - width / 2, y - height / 2, 0);
+                Vector3 tilePosition = new Vector3(
+                    x - (width / 2f) + 0.5f,
+                    y - (height / 2f) + 0.5f,
+                    0
+                );
                 GameObject tile = Instantiate(tilePrefab, tilePosition, Quaternion.identity);
                 tile.name = $"Tile {x}, {y}";
                 tile.transform.SetParent(transform);
@@ -33,30 +70,71 @@ public class GridManager : MonoBehaviour
                 map[x, y] = tileScript;
             }
         }
+        
+        gridGenerated = true;
     }
 
     public Tile GetTile(Vector2Int position)
     {
-        return map[position.x, position.y];
+        if (useTilemapGenerator || !gridGenerated)
+        {
+            Tile[] allTiles = GetComponentsInChildren<Tile>();
+            foreach (Tile tile in allTiles)
+            {
+                if (tile != null && tile.gridPosition == position)
+                {
+                    return tile;
+                }
+            }
+            return null;
+        }
+        else
+        {
+            if (position.x < 0 || position.x >= width || position.y < 0 || position.y >= height)
+            {
+                return null;
+            }
+            return map[position.x, position.y];
+        }
     }
 
     public Tile GetTile(Vector3 position)
     {
-        // Corrige o cálculo de offset baseado no grid real
-        float relX = position.x + width / 2f;
-        float relY = position.y + height / 2f;
-
-        int x = Mathf.RoundToInt(relX);
-        int y = Mathf.RoundToInt(relY);
-
-        // Verifica limites pra evitar NullReference
-        if (x < 0 || x >= width || y < 0 || y >= height)
+        if (useTilemapGenerator || !gridGenerated)
         {
-            Debug.LogWarning($"GetTile: posição ({x},{y}) fora dos limites do mapa ({width},{height}) para posição mundial {position}");
-            return null;
+            Tile[] allTiles = GetComponentsInChildren<Tile>();
+            Tile closestTile = null;
+            float closestDistance = float.MaxValue;
+            
+            foreach (Tile tile in allTiles)
+            {
+                if (tile != null)
+                {
+                    float distance = Vector3.Distance(tile.transform.position, position);
+                    if (distance < closestDistance)
+                    {
+                        closestDistance = distance;
+                        closestTile = tile;
+                    }
+                }
+            }
+            return closestTile;
         }
+        else
+        {
+            float relX = position.x + (width / 2f) - 0.5f;
+            float relY = position.y + (height / 2f) - 0.5f;
 
-        return map[x, y];
+            int x = Mathf.RoundToInt(relX);
+            int y = Mathf.RoundToInt(relY);
+
+            if (x < 0 || x >= width || y < 0 || y >= height)
+            {
+                return null;
+            }
+
+            return map[x, y];
+        }
     }
 
     public int GetHeuristic(Tile start, Tile end)
@@ -123,25 +201,67 @@ public class GridManager : MonoBehaviour
     {
         List<Tile> neighbors = new List<Tile>();
 
-        for (int x = -1; x <= 1; x++)
+        if (useTilemapGenerator || !gridGenerated)
         {
-            for (int y = -1; y <= 1; y++)
+            Tile[] allTiles = GetComponentsInChildren<Tile>();
+            Tile centerTile = null;
+            
+            foreach (Tile tile in allTiles)
             {
-                int posX = tilePosition.x + x;
-                int posY = tilePosition.y + y;
+                if (tile != null && tile.gridPosition == tilePosition)
+                {
+                    centerTile = tile;
+                    break;
+                }
+            }
+            
+            if (centerTile == null) return neighbors;
+            
+            for (int x = -1; x <= 1; x++)
+            {
+                for (int y = -1; y <= 1; y++)
+                {
+                    if (x == 0 && y == 0) continue;
+                    
+                    Vector2Int neighborPos = new Vector2Int(tilePosition.x + x, tilePosition.y + y);
+                    
+                    foreach (Tile tile in allTiles)
+                    {
+                        if (tile != null && tile.gridPosition == neighborPos)
+                        {
+                            if (!includeDiagonals && IsDiagonal(centerTile, tile))
+                                continue;
+                            
+                            neighbors.Add(tile);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            for (int x = -1; x <= 1; x++)
+            {
+                for (int y = -1; y <= 1; y++)
+                {
+                    int posX = tilePosition.x + x;
+                    int posY = tilePosition.y + y;
 
-                if (posX < 0 || posY < 0 || posX >= width || posY >= height)
-                    continue;
+                    if (posX < 0 || posY < 0 || posX >= width || posY >= height)
+                        continue;
 
-                Tile current = map[posX, posY];
+                    Tile current = map[posX, posY];
+                    if (current == null) continue;
 
-                if (current.gridPosition == tilePosition)
-                    continue;
+                    if (current.gridPosition == tilePosition)
+                        continue;
 
-                if (!includeDiagonals && IsDiagonal(map[tilePosition.x, tilePosition.y], current))
-                    continue;
-                
-                neighbors.Add(current);
+                    if (!includeDiagonals && IsDiagonal(map[tilePosition.x, tilePosition.y], current))
+                        continue;
+                    
+                    neighbors.Add(current);
+                }
             }
         }
         return neighbors;
@@ -158,27 +278,58 @@ public class GridManager : MonoBehaviour
 
     public void ResetGridHighlights()
     {
-        foreach (Tile tile in map)
+        if (useTilemapGenerator || !gridGenerated)
         {
-            if (Tile.selectedTile != tile)
+            // Busca todos os tiles filhos do GridManager
+            Tile[] allTiles = GetComponentsInChildren<Tile>();
+            foreach (Tile tile in allTiles)
             {
-                tile.inMoveRange = false;
-                tile.inAttackRange = false;
-                tile.ChangeColor(tile.originalColor);
+                if (tile != null && Tile.selectedTile != tile)
+                {
+                    tile.inMoveRange = false;
+                    tile.inAttackRange = false;
+                    tile.ChangeColor(tile.originalColor);
+                }
+            }
+        }
+        else
+        {
+            foreach (Tile tile in map)
+            {
+                if (tile != null && Tile.selectedTile != tile)
+                {
+                    tile.inMoveRange = false;
+                    tile.inAttackRange = false;
+                    tile.ChangeColor(tile.originalColor);
+                }
             }
         }
     }
 
     public void ClearTileOccupations()
     {
-        for (int x = 0; x < width; x++)
+        if (useTilemapGenerator || !gridGenerated)
         {
-            for (int y = 0; y < height; y++)
+            Tile[] allTiles = GetComponentsInChildren<Tile>();
+            foreach (Tile tile in allTiles)
             {
-                Tile tile = map[x, y];
                 if (tile != null)
                 {
                     tile.isOccupied = false;
+                }
+            }
+        }
+        else
+        {
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    Tile tile = map[x, y];
+                    if (tile != null)
+                    {
+                        tile.isOccupied = false;
+                    }
                 }
             }
         }
@@ -187,17 +338,38 @@ public class GridManager : MonoBehaviour
 
     public List<Tile> GetHighlightRange(Vector2Int start, int moveRange, int attackRange)
     {
+        Tile tileStart = GetTile(start);
+        if (tileStart == null)
+        {
+            return new List<Tile>();
+        }
+        
         if (moveRange == int.MaxValue)
         {
             List<Tile> allTiles = new List<Tile>();
-            for (int x = 0; x < width; x++)
+            if (useTilemapGenerator || !gridGenerated)
             {
-                for (int y = 0; y < height; y++)
+                Tile[] allTilesArray = GetComponentsInChildren<Tile>();
+                foreach (Tile tile in allTilesArray)
                 {
-                    if (!map[x, y].isOccupied)
+                    if (tile != null && !tile.isOccupied)
                     {
-                        allTiles.Add(map[x, y]);
-                        map[x, y].inMoveRange = true;
+                        allTiles.Add(tile);
+                        tile.inMoveRange = true;
+                    }
+                }
+            }
+            else
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    for (int y = 0; y < height; y++)
+                    {
+                        if (map[x, y] != null && !map[x, y].isOccupied)
+                        {
+                            allTiles.Add(map[x, y]);
+                            map[x, y].inMoveRange = true;
+                        }
                     }
                 }
             }
@@ -208,7 +380,6 @@ public class GridManager : MonoBehaviour
         Dictionary<Tile, int> costSoFar = new Dictionary<Tile, int>();
         Queue<Tile> edge = new Queue<Tile>();
 
-        Tile tileStart = map[start.x, start.y];
         edge.Enqueue(tileStart);
         costSoFar[tileStart] = 0;
 
