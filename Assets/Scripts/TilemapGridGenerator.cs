@@ -8,6 +8,10 @@ public class TilemapGridGenerator : MonoBehaviour
 
     void Start()
     {
+        GenerateGridFromTilemap();
+    }
+        public void GenerateGridFromTilemap()
+    {
         Tilemap tilemap = GetComponent<Tilemap>();
 
         if (tilemap == null)
