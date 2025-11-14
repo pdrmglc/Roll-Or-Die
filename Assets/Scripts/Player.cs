@@ -48,6 +48,9 @@ public class Player : MonoBehaviour
             gridManager.ResetGridHighlights();
             gridManager.ClearTileOccupations();
             // Ativa a movimentação por grid
+            gridManager.DestroyGrid(); // limpar qualquer lixo antigo
+            FindAnyObjectByType<TilemapGridGenerator>().GenerateGridFromTilemap();
+
             SnapUnits();
 
             // Primeiro mostra a UI
@@ -60,11 +63,12 @@ public class Player : MonoBehaviour
             // Ativa a movimentação livre
             // Desativa a movimentação por grid
             // Se sair do modo combate, esconde tudo
+            gridManager.DestroyGrid(); // limpar qualquer lixo antigo
             turnManager.SetCombatMode(false);
         }
 
         // Por último atualiza os highlights
-        if (selectedUnit != null)
+        if (inCombatMode && selectedUnit != null)
         {
             gridManager.ResetGridHighlights();
             gridManager.HighlightRange(

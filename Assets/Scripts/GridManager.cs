@@ -12,6 +12,8 @@ public class GridManager : MonoBehaviour
     public bool useTilemapGenerator = false;
     private Tile[,] map;
     private bool gridGenerated = false;
+    public List<GameObject> spawnedTiles = new List<GameObject>();
+
     
     void Awake()
     {
@@ -26,23 +28,35 @@ public class GridManager : MonoBehaviour
             CheckForTilemapGenerator();
         }
     }
-    
+
     private void CheckForTilemapGenerator()
     {
         TilemapGridGenerator tilemapGenerator = FindAnyObjectByType<TilemapGridGenerator>();
         bool shouldUseGenerator = useTilemapGenerator || (tilemapGenerator != null);
-        
+
         if (tilemapGenerator != null && !useTilemapGenerator)
         {
             useTilemapGenerator = true;
         }
-        
+
         if (!shouldUseGenerator && !gridGenerated)
         {
             GenerateGrid();
             gridGenerated = true;
         }
     }
+    
+    public void DestroyGrid()
+    {
+        foreach (GameObject tile in spawnedTiles)
+        {
+            if (tile != null)
+                GameObject.Destroy(tile);
+        }
+
+        spawnedTiles.Clear();
+    }
+
 
     public void GenerateGrid()
     {

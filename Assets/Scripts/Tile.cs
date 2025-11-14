@@ -34,7 +34,10 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     public void ChangeColor(Color newColor)
     {
-        tileRenderer.material.color = newColor;
+        if (tileRenderer != null)
+        {
+            tileRenderer.material.color = newColor;
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)

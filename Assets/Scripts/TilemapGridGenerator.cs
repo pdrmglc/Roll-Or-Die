@@ -8,7 +8,7 @@ public class TilemapGridGenerator : MonoBehaviour
 
     void Start()
     {
-        GenerateGridFromTilemap();
+        // GenerateGridFromTilemap();
     }
         public void GenerateGridFromTilemap()
     {
@@ -43,6 +43,8 @@ public class TilemapGridGenerator : MonoBehaviour
             {
                 Vector3 worldPos = tilemap.CellToWorld(pos) + tilemap.cellSize / 2;
                 GameObject spawned = Instantiate(tilePrefab, worldPos, Quaternion.identity);
+                gridManager.spawnedTiles.Add(spawned);
+
 
                 if (gridManager != null)
                 {
