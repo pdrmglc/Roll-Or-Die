@@ -129,6 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 19150261}
   - component: {fileID: 19150260}
+  - component: {fileID: 19150262}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -168,6 +169,22 @@ Transform:
   - {fileID: 342980234}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &19150262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 19150259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbbbb48e01e44b0419b8e18ba5fde2bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TilemapGridGenerator
+  tilePrefab: {fileID: 7142272957316629534, guid: ca0262a8dcea995408956c03813f9e36, type: 3}
+  gridManager: {fileID: 1852550310}
+  groundTilemap: {fileID: 1968529170}
+  collisionTilemap: {fileID: 1134339543}
 --- !u!1 &342980233
 GameObject:
   m_ObjectHideFlags: 0
@@ -246,7 +263,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1060452847
-  m_SortingLayer: 6
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -571,7 +588,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1055696843
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 5
   m_Sprite: {fileID: 4723107735738678597, guid: 7f9fe9e3ba4f87a4194786bea60718e7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -618,7 +635,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.007613927, y: -0.079945296}
+  m_Offset: {x: -0.0051494837, y: -0.19021595}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -628,7 +645,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.64976364, y: 0.8401094}
+  m_Size: {x: 0.45879698, y: 0.5955564}
   m_EdgeRadius: 0
 --- !u!95 &390027801
 Animator:
@@ -1176,7 +1193,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -272786667
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -1716,7 +1733,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -54961973
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -2839,7 +2856,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 1cb1309970042d446ba61ced9e072891, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -3172,6 +3189,7 @@ MonoBehaviour:
   height: 20
   tilePrefab: {fileID: 7142272957316629534, guid: ca0262a8dcea995408956c03813f9e36, type: 3}
   useTilemapGenerator: 0
+  spawnedTiles: []
 --- !u!4 &1852550311
 Transform:
   m_ObjectHideFlags: 0
@@ -3334,7 +3352,6 @@ GameObject:
   - component: {fileID: 1968529168}
   - component: {fileID: 1968529170}
   - component: {fileID: 1968529169}
-  - component: {fileID: 1968529171}
   m_Layer: 0
   m_Name: Ground
   m_TagString: Untagged
@@ -5460,20 +5477,6 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!114 &1968529171
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1968529167}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cbbbb48e01e44b0419b8e18ba5fde2bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TilemapGridGenerator
-  tilePrefab: {fileID: 7142272957316629534, guid: ca0262a8dcea995408956c03813f9e36, type: 3}
-  gridManager: {fileID: 1852550310}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

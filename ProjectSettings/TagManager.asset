@@ -49,6 +49,9 @@ TagManager:
   - name: WalkInfront
     uniqueID: 2981285015
     locked: 0
+  - name: Grid
+    uniqueID: 2969376829
+    locked: 0
   - name: Collision
     uniqueID: 4240005323
     locked: 0
