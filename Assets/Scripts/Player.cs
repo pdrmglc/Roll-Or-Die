@@ -65,6 +65,7 @@ public class Player : MonoBehaviour
             // Se sair do modo combate, esconde tudo
             gridManager.DestroyGrid(); // limpar qualquer lixo antigo
             turnManager.SetCombatMode(false);
+            selectedUnit = null;
         }
 
         // Por último atualiza os highlights
