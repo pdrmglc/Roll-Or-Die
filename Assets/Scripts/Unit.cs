@@ -35,7 +35,7 @@ public class Unit : MonoBehaviour, IPointerDownHandler
 
         animator = GetComponentInChildren<Animator>();
 
-        stats = new UnitStats(Random.Range(0, 100), Random.Range(0, 100));
+        stats = new UnitStats(Random.Range(60, 60), Random.Range(1, 1));
         movementRange = Mathf.RoundToInt(stats.speed * 0.1f);
         attackRange = Mathf.RoundToInt(stats.perception * 0.05f);
         attackRange = Mathf.Clamp(attackRange, 1, int.MaxValue);
