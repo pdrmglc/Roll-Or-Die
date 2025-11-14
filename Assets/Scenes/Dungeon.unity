@@ -185,6 +185,8 @@ MonoBehaviour:
   gridManager: {fileID: 1852550310}
   groundTilemap: {fileID: 1968529170}
   collisionTilemap: {fileID: 1134339543}
+  player: {fileID: 1412953317}
+  radius: 12
 --- !u!1 &342980233
 GameObject:
   m_ObjectHideFlags: 0
@@ -1728,6 +1730,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   playerName: Jogador 1
+  selectedUnit: {fileID: 0}
   gridManager: {fileID: 1852550310}
   turnManager: {fileID: 1384037004}
   playerUnits:
@@ -2920,6 +2923,7 @@ MonoBehaviour:
   bannerText: {fileID: 1317509898}
   turnBanner: {fileID: 1317509896}
   gridManager: {fileID: 1852550310}
+  tilemapGenerator: {fileID: 0}
   fadeSpeed: 0.5
   endTurnButton: {fileID: 935053447}
   turnUI: {fileID: 577998374}

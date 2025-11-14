@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class Player : MonoBehaviour
 {
     public string playerName;
-    public static Unit selectedUnit;
+    public Unit selectedUnit;
     public GridManager gridManager;
     public TurnManager turnManager;
 
@@ -23,6 +23,14 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.C))
         {
             ToggleCombatMode();
+        }
+    }
+    public static Player ActivePlayer
+    {
+        get
+        {
+            TurnManager tm = FindAnyObjectByType<TurnManager>();
+            return tm.players[tm.activePlayerIndex];
         }
     }
     

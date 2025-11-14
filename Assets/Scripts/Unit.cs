@@ -65,6 +65,16 @@ public class Unit : MonoBehaviour, IPointerDownHandler
     {
         HandleMovement();
     }
+    public static Unit Selected
+    {
+        get
+        {
+            Player p = Player.ActivePlayer;
+            if (p == null) return null;
+            return p.selectedUnit;
+        }
+    }
+
 
     public void SetCombatMode(bool enabled)
     {

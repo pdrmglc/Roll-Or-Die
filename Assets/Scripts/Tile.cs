@@ -53,7 +53,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         if (selectedTile != this)
         {
             // ChangeColor(originalColor);
-            if (Player.selectedUnit && Player.selectedUnit.inCombatMode)
+            if (Unit.Selected && Unit.Selected.inCombatMode)
             {
                 ChangeColor(inMoveRange ? Color.cyan : inAttackRange ? Color.red : originalColor);
             }
@@ -78,26 +78,26 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             return;
         }
 
-        if (Player.selectedUnit)
+        if (Unit.Selected)
         {
-            if (Player.selectedUnit.isMoving) return;
+            if (Unit.Selected.isMoving) return;
 
             if (inMoveRange)
             {
-                Tile unitTile = gridManager.GetTile(Player.selectedUnit.transform.position);
-                Player.selectedUnit.gridPosition = unitTile.gridPosition;
-                gridManager.GetTile(Player.selectedUnit.gridPosition).isOccupied = false;
-                if (gridManager.GetTile(Player.selectedUnit.gridPosition) != this)
+                Tile unitTile = gridManager.GetTile(Unit.Selected.transform.position);
+                Unit.Selected.gridPosition = unitTile.gridPosition;
+                gridManager.GetTile(Unit.Selected.gridPosition).isOccupied = false;
+                if (gridManager.GetTile(Unit.Selected.gridPosition) != this)
                 {
-                    Player.selectedUnit.path = gridManager.GetPath(gridManager.GetTile(Player.selectedUnit.gridPosition), this);
-                    Player.selectedUnit.MoveTo(Player.selectedUnit.path[0].transform.position,
-                                            Player.selectedUnit.path[0].gridPosition);
+                    Unit.Selected.path = gridManager.GetPath(gridManager.GetTile(Unit.Selected.gridPosition), this);
+                    Unit.Selected.MoveTo(Unit.Selected.path[0].transform.position,
+                                            Unit.Selected.path[0].gridPosition);
                     isOccupied = true;
                 }
             }
             else
             {
-                Player.selectedUnit = null;
+                Player.ActivePlayer.selectedUnit = null;
             }
         }
 

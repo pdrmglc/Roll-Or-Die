@@ -6,20 +6,24 @@ public class TilemapGridGenerator : MonoBehaviour
     public GameObject tilePrefab;
     public GridManager gridManager;
 
-    public Tilemap groundTilemap;      // Tilemap usado para gerar o grid
-    public Tilemap collisionTilemap;   // Tilemap usado para marcar ocupação
+    public Tilemap groundTilemap;
+    public Tilemap collisionTilemap;
+
+    public Transform player; // <<< transforma do Unit
+    public int radius = 12;   // <<< raio em células
 
     public void GenerateGridFromTilemap()
     {
+        if (player == null)
+        {
+            Debug.LogError("TilemapGridGenerator: Player não atribuído!");
+            return;
+        }
+
         if (groundTilemap == null)
         {
             Debug.LogError("TilemapGridGenerator: Ground Tilemap não atribuído!");
             return;
-        }
-
-        if (collisionTilemap == null)
-        {
-            Debug.LogWarning("TilemapGridGenerator: Collision Tilemap não atribuído!");
         }
 
         if (tilePrefab == null)
@@ -29,24 +33,28 @@ public class TilemapGridGenerator : MonoBehaviour
         }
 
         if (gridManager == null)
-        {
             gridManager = FindAnyObjectByType<GridManager>();
-        }
 
         gridManager.spawnedTiles.Clear();
 
-        BoundsInt bounds = groundTilemap.cellBounds;
+        // 🔥 Converte posição do player para coordenada de célula no tilemap
+        Vector3Int playerCell = groundTilemap.WorldToCell(player.position);
 
-        int minX = bounds.xMin;
-        int minY = bounds.yMin;
-
-        foreach (var pos in bounds.allPositionsWithin)
+        // 🔥 Percorre apenas o quadrado em torno do player
+        for (int x = playerCell.x - radius; x <= playerCell.x + radius; x++)
         {
-            TileBase tile = groundTilemap.GetTile(pos);
-
-            if (tile != null)
+            for (int y = playerCell.y - radius; y <= playerCell.y + radius; y++)
             {
+                Vector3Int pos = new Vector3Int(x, y, 0);
+
+                TileBase tile = groundTilemap.GetTile(pos);
+
+                if (tile == null)
+                    continue; // não existe tile → não gera grid
+
+                // Converte para posição no mundo
                 Vector3 worldPos = groundTilemap.CellToWorld(pos) + groundTilemap.cellSize / 2;
+
                 GameObject spawned = Instantiate(tilePrefab, worldPos, Quaternion.identity);
 
                 if (gridManager != null)
@@ -58,15 +66,13 @@ public class TilemapGridGenerator : MonoBehaviour
 
                 if (tileScript != null)
                 {
-                    Vector2Int gridPos = new Vector2Int(pos.x - minX, pos.y - minY);
-                    tileScript.gridPosition = gridPos;
+                    // Converte a posição real do tilemap para uma posição interna do seu grid
+                    tileScript.gridPosition = new Vector2Int(pos.x, pos.y);
 
-                    // 🔥 CHECANDO COLISÃO
+                    // Checa ocupação
                     if (collisionTilemap != null)
                     {
-                        TileBase collisionTile = collisionTilemap.GetTile(pos);
-
-                        if (collisionTile != null)
+                        if (collisionTilemap.GetTile(pos) != null)
                         {
                             tileScript.isOccupied = true;
                             spawned.name += " [BLOCKED]";
@@ -74,7 +80,7 @@ public class TilemapGridGenerator : MonoBehaviour
                     }
                 }
 
-                spawned.name = $"Tile {pos} [Grid: {tileScript?.gridPosition}]";
+                spawned.name = $"Tile ({pos.x},{pos.y})";
 
                 gridManager.spawnedTiles.Add(spawned);
             }

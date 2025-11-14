@@ -13,6 +13,8 @@ public class TurnManager : MonoBehaviour
 
     public GridManager gridManager;
 
+    public TilemapGridGenerator tilemapGenerator;
+
     public float fadeSpeed = 0.5f;
 
     public CanvasGroup endTurnButton; // Adicione esta linha
@@ -22,6 +24,8 @@ public class TurnManager : MonoBehaviour
     void Start()
     {
         gridManager = FindAnyObjectByType<GridManager>();
+        tilemapGenerator = FindAnyObjectByType<TilemapGridGenerator>();
+
         
         turnDisplay.text = $"Turn: {turn}";
         
@@ -42,6 +46,22 @@ public class TurnManager : MonoBehaviour
     }
 
     // Ends the current player's turn, resets their units, and moves to the next player
+    // public void EndTurn()
+    // {
+    //     players[activePlayerIndex].ResetUnits();
+    //     activePlayerIndex = (activePlayerIndex + 1) % players.Length;
+
+    //     if (activePlayerIndex == 0)
+    //     {
+    //         turn++;
+    //         turnDisplay.text = $"Turn: {turn}";
+    //     }
+
+    //     bannerText.text = $"{players[activePlayerIndex].playerName}'s Turn";
+    //     turnBanner.alpha = 1;
+    //     gridManager.ResetGridHighlights();
+    // }
+
     public void EndTurn()
     {
         players[activePlayerIndex].ResetUnits();
@@ -55,6 +75,41 @@ public class TurnManager : MonoBehaviour
 
         bannerText.text = $"{players[activePlayerIndex].playerName}'s Turn";
         turnBanner.alpha = 1;
+
+
+        if (gridManager == null || tilemapGenerator == null)
+        {
+            Debug.LogError("TurnManager: GridManager ou TilemapGridGenerator não encontrados na cena!");
+            return;
+        }
+
+        // ===============================
+        // 🔥 DESTRUIR GRID ATUAL
+        // ===============================
+        gridManager.DestroyGrid();
+
+        // ===============================
+        // 🔥 DEFINIR A UNIDADE DO NOVO JOGADOR
+        //    (ajuste dependendo da sua lógica)
+        // ===============================
+
+        Unit activeUnit = players[activePlayerIndex].selectedUnit;
+
+        if (activeUnit == null)
+        {
+            Debug.LogError("TurnManager: Jogador não possui uma Unit ativa!");
+            return;
+        }
+
+        // Passa a posição do novo player para o gerador
+        tilemapGenerator.player = activeUnit.transform;
+
+        // ===============================
+        // 🔥 RECRIAR O GRID AO REDOR DA NOVA UNIDADE
+        // ===============================
+        tilemapGenerator.GenerateGridFromTilemap();
+
+        // Resetar destaques do grid
         gridManager.ResetGridHighlights();
     }
 

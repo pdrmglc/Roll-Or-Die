@@ -458,7 +458,7 @@ public class GridManager : MonoBehaviour
 
         foreach (Tile tile in reachableTiles)
         {
-            if (Player.selectedUnit && Player.selectedUnit.inCombatMode)
+            if (Unit.Selected && Unit.Selected.inCombatMode)
             {
                 if (tile.inMoveRange)
                 {
