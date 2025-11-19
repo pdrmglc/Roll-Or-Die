@@ -46,6 +46,9 @@ TagManager:
   - name: Ground
     uniqueID: 1743340889
     locked: 0
+  - name: GroundDecor
+    uniqueID: 1494737703
+    locked: 0
   - name: WalkInfront
     uniqueID: 2981285015
     locked: 0
