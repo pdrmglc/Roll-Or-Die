@@ -38,6 +38,24 @@ TextureImporter:
   - first:
       213: -9070125496586269762
     second: Humano Mago_11
+  - first:
+      213: 2855992698809850028
+    second: Humano Mago_12
+  - first:
+      213: 4546004345025437609
+    second: Humano Mago_13
+  - first:
+      213: -2431532629026818081
+    second: Humano Mago_14
+  - first:
+      213: 2986753224685987273
+    second: Humano Mago_15
+  - first:
+      213: -4651329133453217876
+    second: Humano Mago_16
+  - first:
+      213: 7961740403193419864
+    second: Humano Mago_17
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -84,7 +102,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 16
+  spritePixelsToUnits: 90
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -136,10 +154,10 @@ TextureImporter:
       name: Humano Mago_0
       rect:
         serializedVersion: 2
-        x: 5
-        y: 44
-        width: 15
-        height: 19
+        x: 27
+        y: 136
+        width: 78
+        height: 108
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -158,10 +176,10 @@ TextureImporter:
       name: Humano Mago_1
       rect:
         serializedVersion: 2
-        x: 21
-        y: 44
-        width: 15
-        height: 19
+        x: 132
+        y: 136
+        width: 78
+        height: 108
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -180,10 +198,10 @@ TextureImporter:
       name: Humano Mago_2
       rect:
         serializedVersion: 2
-        x: 37
-        y: 44
-        width: 15
-        height: 19
+        x: 227
+        y: 136
+        width: 78
+        height: 113
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -202,10 +220,10 @@ TextureImporter:
       name: Humano Mago_3
       rect:
         serializedVersion: 2
-        x: 53
-        y: 44
-        width: 15
-        height: 19
+        x: 327
+        y: 136
+        width: 78
+        height: 108
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -224,10 +242,10 @@ TextureImporter:
       name: Humano Mago_4
       rect:
         serializedVersion: 2
-        x: 5
-        y: 24
-        width: 15
-        height: 19
+        x: 427
+        y: 136
+        width: 78
+        height: 108
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -246,10 +264,10 @@ TextureImporter:
       name: Humano Mago_5
       rect:
         serializedVersion: 2
-        x: 21
-        y: 23
-        width: 15
-        height: 20
+        x: 527
+        y: 136
+        width: 78
+        height: 113
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -268,10 +286,10 @@ TextureImporter:
       name: Humano Mago_6
       rect:
         serializedVersion: 2
-        x: 37
-        y: 24
-        width: 15
-        height: 19
+        x: 623
+        y: 136
+        width: 77
+        height: 108
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -290,10 +308,10 @@ TextureImporter:
       name: Humano Mago_7
       rect:
         serializedVersion: 2
-        x: 53
-        y: 24
-        width: 15
-        height: 19
+        x: 728
+        y: 136
+        width: 78
+        height: 108
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -312,10 +330,10 @@ TextureImporter:
       name: Humano Mago_8
       rect:
         serializedVersion: 2
-        x: 5
-        y: 4
-        width: 15
-        height: 18
+        x: 828
+        y: 131
+        width: 78
+        height: 108
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -334,10 +352,10 @@ TextureImporter:
       name: Humano Mago_9
       rect:
         serializedVersion: 2
-        x: 21
-        y: 4
-        width: 15
-        height: 18
+        x: 27
+        y: 21
+        width: 78
+        height: 113
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -356,10 +374,10 @@ TextureImporter:
       name: Humano Mago_10
       rect:
         serializedVersion: 2
-        x: 37
-        y: 4
-        width: 15
-        height: 19
+        x: 127
+        y: 16
+        width: 78
+        height: 112
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -378,10 +396,10 @@ TextureImporter:
       name: Humano Mago_11
       rect:
         serializedVersion: 2
-        x: 53
-        y: 3
-        width: 15
-        height: 20
+        x: 227
+        y: 16
+        width: 78
+        height: 112
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -392,6 +410,138 @@ TextureImporter:
       bones: []
       spriteID: ebb03cb9ae0702280800000000000000
       internalID: -9070125496586269762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Humano Mago_12
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 16
+        width: 78
+        height: 112
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca89ba55a3682a720800000000000000
+      internalID: 2855992698809850028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Humano Mago_13
+      rect:
+        serializedVersion: 2
+        x: 427
+        y: 15
+        width: 78
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9af9f94bdd6a61f30800000000000000
+      internalID: 4546004345025437609
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Humano Mago_14
+      rect:
+        serializedVersion: 2
+        x: 527
+        y: 16
+        width: 78
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd7b51be4f5714ed0800000000000000
+      internalID: -2431532629026818081
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Humano Mago_15
+      rect:
+        serializedVersion: 2
+        x: 628
+        y: 16
+        width: 78
+        height: 112
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9c5292dbb34137920800000000000000
+      internalID: 2986753224685987273
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Humano Mago_16
+      rect:
+        serializedVersion: 2
+        x: 728
+        y: 21
+        width: 78
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: caf68130cc8237fb0800000000000000
+      internalID: -4651329133453217876
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Humano Mago_17
+      rect:
+        serializedVersion: 2
+        x: 828
+        y: 16
+        width: 78
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 858183ea6b8cd7e60800000000000000
+      internalID: 7961740403193419864
       vertices: []
       indices: 
       edges: []
@@ -414,6 +564,12 @@ TextureImporter:
       Humano Mago_1: -4361842887155231644
       Humano Mago_10: -340934326256362013
       Humano Mago_11: -9070125496586269762
+      Humano Mago_12: 2855992698809850028
+      Humano Mago_13: 4546004345025437609
+      Humano Mago_14: -2431532629026818081
+      Humano Mago_15: 2986753224685987273
+      Humano Mago_16: -4651329133453217876
+      Humano Mago_17: 7961740403193419864
       Humano Mago_2: -4152228000604249857
       Humano Mago_3: 7971238028972514652
       Humano Mago_4: 5559615541648594327
