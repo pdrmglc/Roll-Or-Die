@@ -10264,7 +10264,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Player
   playerName: NPC
   selectedUnit: {fileID: 0}
-  gridManager: {fileID: 1852550310}
   turnManager: {fileID: 1384037004}
   playerUnits:
   - {fileID: 221428726}
@@ -11043,7 +11042,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Player
   playerName: Jogador 1
   selectedUnit: {fileID: 0}
-  gridManager: {fileID: 1852550310}
   turnManager: {fileID: 1384037004}
   playerUnits:
   - {fileID: 1412953316}
