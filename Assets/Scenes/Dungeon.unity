@@ -602,7 +602,7 @@ MonoBehaviour:
   movementRange: 3
   attackRange: 1
   movementLeft: 0
-  owner: {fileID: 1107597746}
+  owner: {fileID: 767238354}
   path: []
   inCombatMode: 0
   spriteTransform: {fileID: 0}
@@ -10262,8 +10262,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab159138aef51ca4f859aca6d7f8e1ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
-  playerName: Jogador 1
-  selectedUnit: {fileID: 221428726}
+  playerName: NPC
+  selectedUnit: {fileID: 0}
   gridManager: {fileID: 1852550310}
   turnManager: {fileID: 1384037004}
   playerUnits:
@@ -11042,7 +11042,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   playerName: Jogador 1
-  selectedUnit: {fileID: 1412953316}
+  selectedUnit: {fileID: 0}
   gridManager: {fileID: 1852550310}
   turnManager: {fileID: 1384037004}
   playerUnits:
@@ -33547,7 +33547,7 @@ MonoBehaviour:
   height: 20
   tilePrefab: {fileID: 7142272957316629534, guid: ca0262a8dcea995408956c03813f9e36, type: 3}
   useTilemapGenerator: 0
-  spawnedTiles: []
+  collisionTilemap: {fileID: 0}
 --- !u!4 &1852550311
 Transform:
   m_ObjectHideFlags: 0

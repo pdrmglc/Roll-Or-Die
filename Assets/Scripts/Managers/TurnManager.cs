@@ -20,6 +20,9 @@ public class TurnManager : MonoBehaviour
     public CanvasGroup endTurnButton; // Adicione esta linha
     public CanvasGroup turnUI; // Adicione esta linha
 
+    public Player ActivePlayer => players[activePlayerIndex];
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -44,23 +47,6 @@ public class TurnManager : MonoBehaviour
             turnBanner.alpha -= fadeSpeed * Time.deltaTime;
         }
     }
-
-    // Ends the current player's turn, resets their units, and moves to the next player
-    // public void EndTurn()
-    // {
-    //     players[activePlayerIndex].ResetUnits();
-    //     activePlayerIndex = (activePlayerIndex + 1) % players.Length;
-
-    //     if (activePlayerIndex == 0)
-    //     {
-    //         turn++;
-    //         turnDisplay.text = $"Turn: {turn}";
-    //     }
-
-    //     bannerText.text = $"{players[activePlayerIndex].playerName}'s Turn";
-    //     turnBanner.alpha = 1;
-    //     gridManager.ResetGridHighlights();
-    // }
 
     public void EndTurn()
     {
@@ -111,6 +97,7 @@ public class TurnManager : MonoBehaviour
 
         // Resetar destaques do grid
         gridManager.ResetGridHighlights();
+        EnableUnitsOfActivePlayer();
     }
 
     // Adicione este método
@@ -126,4 +113,23 @@ public class TurnManager : MonoBehaviour
         bannerText.text = $"{players[activePlayerIndex].playerName}'s Turn";
         turnBanner.alpha = 1;
     }
+
+    public void EnableUnitsOfActivePlayer()
+    {
+        // Desativa todas as units de todos os players
+        foreach (Player p in players)
+        {
+            foreach (Unit u in p.playerUnits)
+            {
+                u.EnableInput(false);
+            }
+        }
+
+        // Ativa apenas as units do player atual
+        foreach (Unit u in ActivePlayer.playerUnits)
+        {
+            u.EnableInput(true);
+        }
+    }
+
 }

@@ -15,7 +15,10 @@ public class Player : MonoBehaviour
     void Start()
     {
         gridManager = FindAnyObjectByType<GridManager>();
-
+        foreach (Unit u in playerUnits)
+            {
+                u.owner = this;
+            }
     }
 
     void Update()
@@ -60,6 +63,11 @@ public class Player : MonoBehaviour
             FindAnyObjectByType<TilemapGridGenerator>().GenerateGridFromTilemap();
 
             SnapUnits();
+            if (selectedUnit == null && playerUnits.Count > 0)
+                {
+                    selectedUnit = playerUnits[0];
+                }
+            gridManager.RecalculateTileOccupations(playerUnits);
 
             // Primeiro mostra a UI
             turnManager.SetCombatMode(true);

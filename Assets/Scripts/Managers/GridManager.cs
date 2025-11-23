@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-
+using UnityEngine.Tilemaps;
 
 public class GridManager : MonoBehaviour
 {
@@ -12,7 +12,52 @@ public class GridManager : MonoBehaviour
     public bool useTilemapGenerator = false;
     private Tile[,] map;
     private bool gridGenerated = false;
-    public List<GameObject> spawnedTiles = new List<GameObject>();
+    // public List<Tile> spawnedTiles = new List<Tile>();
+    private Dictionary<Vector2Int, Tile> tileLookup = new Dictionary<Vector2Int, Tile>();
+    public Tilemap collisionTilemap; // novo: referência ao tilemap de colisão (pode ser nulo)
+
+    public void RegisterGeneratedTile(Tile tile)
+    {
+        if (!tileLookup.ContainsKey(tile.gridPosition))
+            tileLookup.Add(tile.gridPosition, tile);
+    }
+
+    public void RecalculateTileOccupations(List<Unit> allUnits)
+    {
+        // limpa
+        foreach (var kv in tileLookup)
+        {
+            Tile t = kv.Value;
+            if (t != null)
+                t.isOccupied = false;
+        }
+
+        // marca colisões a partir do tilemap (se houver)
+        if (collisionTilemap != null)
+        {
+            foreach (var kv in tileLookup)
+            {
+                Tile t = kv.Value;
+                if (t == null) continue;
+                Vector3Int cell = new Vector3Int(t.gridPosition.x, t.gridPosition.y, 0);
+                if (collisionTilemap.GetTile(cell) != null)
+                    t.isOccupied = true;
+            }
+        }
+
+        // marca ocupação das unidades (players, NPCs, etc.)
+        if (allUnits != null)
+        {
+            foreach (Unit u in allUnits)
+            {
+                if (u == null) continue;
+                Tile tile = GetTile(u.gridPosition);
+                if (tile != null)
+                    tile.isOccupied = true;
+            }
+        }
+    }
+
 
     
     void Awake()
@@ -48,13 +93,10 @@ public class GridManager : MonoBehaviour
     
     public void DestroyGrid()
     {
-        foreach (GameObject tile in spawnedTiles)
-        {
-            if (tile != null)
-                GameObject.Destroy(tile);
-        }
+        foreach (Tile tile in tileLookup.Values)
+            Destroy(tile.gameObject);
 
-        spawnedTiles.Clear();
+        tileLookup.Clear();
     }
 
 
@@ -90,26 +132,10 @@ public class GridManager : MonoBehaviour
 
     public Tile GetTile(Vector2Int position)
     {
-        if (useTilemapGenerator || !gridGenerated)
-        {
-            Tile[] allTiles = GetComponentsInChildren<Tile>();
-            foreach (Tile tile in allTiles)
-            {
-                if (tile != null && tile.gridPosition == position)
-                {
-                    return tile;
-                }
-            }
-            return null;
-        }
-        else
-        {
-            if (position.x < 0 || position.x >= width || position.y < 0 || position.y >= height)
-            {
-                return null;
-            }
-            return map[position.x, position.y];
-        }
+        if (tileLookup.TryGetValue(position, out Tile tile))
+            return tile;
+
+        return null;
     }
 
     public Tile GetTile(Vector3 position)

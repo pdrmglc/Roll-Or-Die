@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
 
 public class Unit : MonoBehaviour, IPointerDownHandler
 {
@@ -158,6 +159,7 @@ public class Unit : MonoBehaviour, IPointerDownHandler
         if (owner != null)
         {
             owner.ChangeSelectUnit(this);
+            Debug.Log($"Unit {name} selecionada pelo jogador {owner.playerName}");
 
         }
         else
@@ -165,4 +167,16 @@ public class Unit : MonoBehaviour, IPointerDownHandler
             Debug.LogError("Unit has no owner assigned!"); // Debug log
         }
     }
+
+    public void EnableInput(bool enable)
+    {
+        var input = GetComponent<PlayerInput>();
+        if (input != null)
+            input.enabled = enable;
+
+        var movement = GetComponent<PlayerMovement>();
+        if (movement != null)
+            movement.enabled = enable;
+    }
+
 }

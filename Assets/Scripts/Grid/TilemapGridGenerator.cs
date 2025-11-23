@@ -35,7 +35,7 @@ public class TilemapGridGenerator : MonoBehaviour
         if (gridManager == null)
             gridManager = FindAnyObjectByType<GridManager>();
 
-        gridManager.spawnedTiles.Clear();
+        // gridManager.spawnedTiles.Clear();
 
         // 🔥 Converte posição do player para coordenada de célula no tilemap
         Vector3Int playerCell = groundTilemap.WorldToCell(player.position);
@@ -81,8 +81,11 @@ public class TilemapGridGenerator : MonoBehaviour
                 }
 
                 spawned.name = $"Tile ({pos.x},{pos.y})";
+                gridManager.collisionTilemap = this.collisionTilemap;
+                gridManager.RegisterGeneratedTile(tileScript);
 
-                gridManager.spawnedTiles.Add(spawned);
+
+                // gridManager.spawnedTiles.Add(tileScript);
             }
         }
     }
