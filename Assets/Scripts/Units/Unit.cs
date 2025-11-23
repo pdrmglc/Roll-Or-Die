@@ -153,20 +153,36 @@ public class Unit : MonoBehaviour, IPointerDownHandler
     }
 
 
+    // public void OnPointerDown(PointerEventData eventData)
+    // {
+    //     if (!inCombatMode) return;
+    //     if (owner != null)
+    //     {
+    //         owner.ChangeSelectUnit(this);
+    //         Debug.Log($"Unit {name} selecionada pelo jogador {owner.playerName}");
+
+    //     }
+    //     else
+    //     {
+    //         Debug.LogError("Unit has no owner assigned!"); // Debug log
+    //     }
+    // }
+
     public void OnPointerDown(PointerEventData eventData)
     {
         if (!inCombatMode) return;
-        if (owner != null)
-        {
-            owner.ChangeSelectUnit(this);
-            Debug.Log($"Unit {name} selecionada pelo jogador {owner.playerName}");
 
-        }
-        else
+        // 🚫 Não pode selecionar Units que não sejam do jogador ativo
+        if (owner != Player.ActivePlayer)
         {
-            Debug.LogError("Unit has no owner assigned!"); // Debug log
+            Debug.Log($"Ignorado: {name} não pertence ao jogador ativo ({Player.ActivePlayer.playerName}).");
+            return;
         }
+
+        owner.ChangeSelectUnit(this);
+        Debug.Log($"Unit {name} selecionada pelo jogador {owner.playerName}");
     }
+
 
     public void EnableInput(bool enable)
     {
