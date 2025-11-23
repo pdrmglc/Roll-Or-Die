@@ -63,6 +63,116 @@ public class TurnManager : MonoBehaviour
         }
     }
 
+    public void EnterCombatMode()
+    {
+        if (gridManager == null || tilemapGenerator == null)
+        {
+            Debug.LogError("TurnManager: GridManager ou TilemapGridGenerator não encontrados!");
+            return;
+        }
+
+        // 🔥 Destrói grid antigo (se houver)
+        gridManager.DestroyGrid();
+
+            Player activePlayer = players[activePlayerIndex];
+
+        if (activePlayer.selectedUnit == null)
+        {
+            // Pegue a primeira unidade desse jogador
+            if (activePlayer.playerUnits.Count > 0)
+            {
+                activePlayer.ChangeSelectUnit(activePlayer.playerUnits[0]);
+            }
+            else
+            {
+                Debug.LogError("ActivePlayer não possui nenhuma unidade!");
+                return;
+            }
+        }
+
+        // 🔥 Seleciona a unidade ativa
+        Unit activeUnit = ActivePlayer.selectedUnit;
+        if (activeUnit == null)
+        {
+            Debug.LogError("TurnManager: ActivePlayer não possui selectedUnit!");
+            return;
+        }
+
+        // 🔥 Diz ao gerador qual é o centro do grid
+        tilemapGenerator.player = activeUnit.transform;
+
+        // 🔥 Recria o grid em volta do activeUnit
+        tilemapGenerator.GenerateGridFromTilemap(allUnits);
+
+        // 🔥 Reposiciona as unidades nos tiles
+        SnapUnits(allUnits);
+
+        // 🔥 Recalcula ocupação dos tiles
+        gridManager.RecalculateTileOccupations(allUnits);
+
+        // 🔥 Atualiza highlights
+        gridManager.ResetGridHighlights();
+        gridManager.HighlightRange(
+            gridManager.GetTile(activeUnit.gridPosition),
+            activeUnit.movementLeft,
+            activeUnit.attackRange
+        );
+
+        // 🔥 Ativa inputs do jogador atual
+        EnableUnitsOfActivePlayer();
+    }
+    public void ExitCombatMode()
+    {
+        // Oculta o grid
+        gridManager.DestroyGrid();
+
+        // Desativa inputs táticos
+        foreach (Unit u in allUnits)
+            u.EnableInput(false);
+    }
+
+    private void SnapUnits(Unit[] units)
+    {
+        foreach (Unit unit in units)
+        {
+            Tile tile = gridManager.GetTile(unit.transform.position);
+            if (tile == null)
+            {
+                Debug.LogWarning($"SnapUnits: Não encontrei tile para {unit.name}");
+                continue;
+            }
+
+            unit.gridPosition = tile.gridPosition;
+            unit.transform.position = tile.transform.position;
+            tile.isOccupied = true;
+        }
+    }
+
+    public void OnUnitSelected(Player player, Unit unit)
+    {
+        // Só processa seleção durante combate
+        // (assume que se o grid existe / modo combate está ativo, o gridManager já foi configurado)
+        if (gridManager == null || unit == null) return;
+
+        // Só mostra highlights se for a vez do player que chamou (evita seleção de outras equipes)
+        if (players[activePlayerIndex] != player)
+            return;
+
+        // Reset e highlight ao redor da unidade selecionada
+        gridManager.ResetGridHighlights();
+
+        Tile tile = gridManager.GetTile(unit.gridPosition);
+        if (tile == null) return;
+
+        gridManager.HighlightRange(
+            tile,
+            unit.inCombatMode ? unit.movementLeft : int.MaxValue,
+            unit.inCombatMode ? unit.attackRange : 0
+        );
+    }
+
+
+
     public void EndTurn()
     {
         players[activePlayerIndex].ResetUnits();
@@ -115,11 +225,17 @@ public class TurnManager : MonoBehaviour
 
     // Adicione este método
     public void SetCombatMode(bool enabled)
-    {
-        endTurnButton.alpha = enabled ? 1 : 0;
-        endTurnButton.interactable = enabled;
-        turnUI.alpha = enabled ? 1 : 0;
-    }
+        {
+            // UI
+            endTurnButton.alpha = enabled ? 1 : 0;
+            endTurnButton.interactable = enabled;
+            turnUI.alpha = enabled ? 1 : 0;
+
+            if (enabled)
+                EnterCombatMode();
+            else
+                ExitCombatMode();
+        }
 
     public void ShowTurnBanner()
     {

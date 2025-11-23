@@ -22,7 +22,7 @@ public class GridManager : MonoBehaviour
             tileLookup.Add(tile.gridPosition, tile);
     }
 
-    public void RecalculateTileOccupations(List<Unit> allUnits)
+    public void RecalculateTileOccupations(Unit[] allUnits)
     {
         // limpa
         foreach (var kv in tileLookup)

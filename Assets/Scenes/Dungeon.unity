@@ -602,7 +602,7 @@ MonoBehaviour:
   movementRange: 3
   attackRange: 1
   movementLeft: 0
-  owner: {fileID: 767238354}
+  owner: {fileID: 0}
   path: []
   inCombatMode: 0
   spriteTransform: {fileID: 0}
@@ -13115,7 +13115,7 @@ MonoBehaviour:
   movementRange: 3
   attackRange: 1
   movementLeft: 0
-  owner: {fileID: 1107597746}
+  owner: {fileID: 0}
   path: []
   inCombatMode: 0
   spriteTransform: {fileID: 0}
