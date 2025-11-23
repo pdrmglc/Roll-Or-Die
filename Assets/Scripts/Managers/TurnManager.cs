@@ -119,16 +119,12 @@ public class TurnManager : MonoBehaviour
         );
 
         // 🔥 Ativa inputs do jogador atual
-        EnableUnitsOfActivePlayer();
+        // EnableUnitsOfActivePlayer();
     }
     public void ExitCombatMode()
     {
         // Oculta o grid
         gridManager.DestroyGrid();
-
-        // Desativa inputs táticos
-        foreach (Unit u in allUnits)
-            u.EnableInput(false);
     }
 
     private void SnapUnits(Unit[] units)
@@ -220,7 +216,7 @@ public class TurnManager : MonoBehaviour
         // ===============================
         tilemapGenerator.GenerateGridFromTilemap(allUnits);
 
-        EnableUnitsOfActivePlayer();
+        // EnableUnitsOfActivePlayer();
     }
 
     // Adicione este método
@@ -241,24 +237,6 @@ public class TurnManager : MonoBehaviour
     {
         bannerText.text = $"{players[activePlayerIndex].playerName}'s Turn";
         turnBanner.alpha = 1;
-    }
-
-    public void EnableUnitsOfActivePlayer()
-    {
-        // Desativa todas as units de todos os players
-        foreach (Player p in players)
-        {
-            foreach (Unit u in p.playerUnits)
-            {
-                u.EnableInput(false);
-            }
-        }
-
-        // Ativa apenas as units do player atual
-        foreach (Unit u in ActivePlayer.playerUnits)
-        {
-            u.EnableInput(true);
-        }
     }
 
 }

@@ -180,19 +180,6 @@ public class Unit : MonoBehaviour, IPointerDownHandler
         }
 
         owner.ChangeSelectUnit(this);
-        Debug.Log($"Unit {name} selecionada pelo jogador {owner.playerName}");
-    }
-
-
-    public void EnableInput(bool enable)
-    {
-        var input = GetComponent<PlayerInput>();
-        if (input != null)
-            input.enabled = enable;
-
-        var movement = GetComponent<PlayerMovement>();
-        if (movement != null)
-            movement.enabled = enable;
     }
 
 }
