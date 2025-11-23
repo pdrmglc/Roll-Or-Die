@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -12,7 +13,7 @@ public class TilemapGridGenerator : MonoBehaviour
     public Transform player; // <<< transforma do Unit
     public int radius = 12;   // <<< raio em células
 
-    public void GenerateGridFromTilemap()
+    public void GenerateGridFromTilemap(Unit[] units = null)
     {
         if (player == null)
         {
@@ -76,6 +77,22 @@ public class TilemapGridGenerator : MonoBehaviour
                         {
                             tileScript.isOccupied = true;
                             spawned.name += " [BLOCKED]";
+                        }
+                    }
+
+                    // 👉 MARCAR OCUPAÇÃO POR UNITS
+                    if (units != null)
+                    {
+                        foreach (Unit u in units)
+                        {
+                            Vector3Int unitCell = groundTilemap.WorldToCell(u.transform.position);
+
+                            if (unitCell.x == pos.x && unitCell.y == pos.y)
+                            {
+                                tileScript.isOccupied = true;
+                                spawned.name += " [UNIT]";
+                                break;
+                            }
                         }
                     }
                 }

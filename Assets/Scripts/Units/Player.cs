@@ -57,7 +57,7 @@ public class Player : MonoBehaviour
         if (inCombatMode)
         {
             gridManager.ResetGridHighlights();
-            gridManager.ClearTileOccupations();
+            // gridManager.ClearTileOccupations();
             // Ativa a movimentação por grid
             gridManager.DestroyGrid(); // limpar qualquer lixo antigo
             FindAnyObjectByType<TilemapGridGenerator>().GenerateGridFromTilemap();

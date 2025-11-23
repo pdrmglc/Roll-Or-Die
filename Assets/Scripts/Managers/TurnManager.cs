@@ -1,9 +1,11 @@
 using UnityEngine;
 using TMPro;
+using System.Collections.Generic;
 
 public class TurnManager : MonoBehaviour
 {
     public Player[] players;
+    private Unit[] allUnits;
     public int activePlayerIndex = 0;
     public int turn = 1;
 
@@ -28,6 +30,19 @@ public class TurnManager : MonoBehaviour
     {
         gridManager = FindAnyObjectByType<GridManager>();
         tilemapGenerator = FindAnyObjectByType<TilemapGridGenerator>();
+
+        // Pega todos as units na cena e salva em allUnits
+        List<Unit> temp = new List<Unit>();
+
+        for (int i = 0; i < players.Length; i++)
+        {
+            foreach (Unit u in players[i].playerUnits)
+            {
+                temp.Add(u);
+            }
+        }
+
+        allUnits = temp.ToArray();
 
         
         turnDisplay.text = $"Turn: {turn}";
@@ -93,10 +108,8 @@ public class TurnManager : MonoBehaviour
         // ===============================
         // 🔥 RECRIAR O GRID AO REDOR DA NOVA UNIDADE
         // ===============================
-        tilemapGenerator.GenerateGridFromTilemap();
+        tilemapGenerator.GenerateGridFromTilemap(allUnits);
 
-        // Resetar destaques do grid
-        gridManager.ResetGridHighlights();
         EnableUnitsOfActivePlayer();
     }
 
