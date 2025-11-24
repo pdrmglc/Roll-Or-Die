@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Collections.Generic;
 
 public class TurnManager : MonoBehaviour
 {
@@ -16,11 +17,22 @@ public class TurnManager : MonoBehaviour
     public CanvasGroup turnBanner;
     public CanvasGroup endTurnButton;
     public CanvasGroup turnUI;
+    public float fadeSpeed = 0.5f;
 
     [Header("Managers")]
     public CombatManager combatManager;
 
-    public float fadeSpeed = 0.5f;
+    [Header("Turn Order UI")]
+    public Transform turnOrderPanel;       // Drag TurnOrderPanel here
+    public GameObject turnOrderItemPrefab; // Drag the prefab here
+
+    private List<GameObject> uiTurnItems = new List<GameObject>();
+
+
+    [Header("Turn Order Logic")]
+    public List<Unit> unitsInCombat = new List<Unit>();
+    public List<Unit> turnOrder = new List<Unit>();
+    public int turnOrderIndex = 0;
 
     private void Start()
     {
@@ -35,6 +47,7 @@ public class TurnManager : MonoBehaviour
 
         // Inicializa combate com todas as Units
         combatManager.InitializeCombat(players);
+        InitializeTurnOrder();
 
         // Configura UI
         turnDisplay.text = $"Turn: {turn}";
@@ -84,29 +97,104 @@ public class TurnManager : MonoBehaviour
 
     public void EndTurn()
     {
-        // Reseta movimentos/ataques do jogador atual
+        // reseta unidades do jogador atual
         ActivePlayer.ResetUnits();
 
-        // Próximo player
-        activePlayerIndex = (activePlayerIndex + 1) % players.Length;
+        // avança para a próxima unidade na ordem de turno
+        turnOrderIndex = (turnOrderIndex + 1) % turnOrder.Count;
 
-        // Novo turno completo quando volta ao player 0
-        if (activePlayerIndex == 0)
+        // identifica qual unit é do próximo jogador
+        Unit nextUnit = turnOrder[turnOrderIndex];
+
+        // encontra o Player dono dessa unit
+        for (int i = 0; i < players.Length; i++)
+        {
+            if (players[i].playerUnits.Contains(nextUnit))
+            {
+                activePlayerIndex = i;
+                players[i].ChangeSelectUnit(nextUnit);
+                break;
+            }
+        }
+
+        // novo turno quando volta para o início da lista
+        if (turnOrderIndex == 0)
         {
             turn++;
             turnDisplay.text = $"Turn: {turn}";
         }
 
-        // Atualiza banner
         ShowTurnBanner();
 
-        // Avise o CombatManager para atualizar grid + highlights
+        // Atualizar grid
         combatManager.RefreshCombat(ActivePlayer);
+
+        // Atualizar HUD de ordem
+        // --- ROTACIONAR LISTA VISUAL (modo FFT) ---
+        List<Unit> rotated = new List<Unit>();
+
+        for (int i = 0; i < turnOrder.Count; i++)
+        {
+            int idx = (turnOrderIndex + i) % turnOrder.Count;
+            rotated.Add(turnOrder[idx]);
+        }
+
+        // Agora atualiza usando a lista rotacionada
+        UpdateTurnOrderUI(rotated);
     }
+
 
     public void ShowTurnBanner()
     {
         bannerText.text = $"{ActivePlayer.playerName}'s Turn";
         turnBanner.alpha = 1;
     }
+
+    // Call this whenever the turn order changes
+    public void UpdateTurnOrderUI(List<Unit> unitsInOrder)
+    {
+        foreach (var item in uiTurnItems)
+            Destroy(item);
+        uiTurnItems.Clear();
+
+        for (int i = 0; i < unitsInOrder.Count; i++)
+        {
+            Unit unit = unitsInOrder[i];
+            GameObject obj = Instantiate(turnOrderItemPrefab, turnOrderPanel);
+            obj.transform.localScale = Vector3.one;
+
+            TextMeshProUGUI text = obj.GetComponentInChildren<TextMeshProUGUI>();
+            text.text = unit.unitName;
+
+            // lista já está rotacionada, então o primeiro item é o ativo
+            if (i == 0)
+                text.color = Color.yellow;
+            else
+                text.color = Color.white;
+
+            uiTurnItems.Add(obj);
+        }
+    }
+
+    public void InitializeTurnOrder()
+    {
+        unitsInCombat.Clear();
+
+        // juntar todas as units de todos os players
+        foreach (var p in players)
+            unitsInCombat.AddRange(p.playerUnits);
+
+        // copiar para turnOrder
+        turnOrder = new List<Unit>(unitsInCombat);
+
+        // se não há atributo speed, simplesmente mantém a ordem original
+        // (ou podemos embaralhar, se quiser)
+        // turnOrder = turnOrder.OrderBy(u => Random.value).ToList(); // opcional
+
+        turnOrderIndex = 0;
+
+        // Atualiza HUD
+        UpdateTurnOrderUI(turnOrder);
+    }
+
 }

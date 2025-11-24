@@ -18,6 +18,7 @@ public class Unit : MonoBehaviour, IPointerDownHandler
     public int movementLeft;
 
     public Player owner;
+    public string unitName;
 
     public List<Tile> path;
 
