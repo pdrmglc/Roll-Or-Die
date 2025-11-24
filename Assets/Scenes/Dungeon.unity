@@ -425,7 +425,7 @@ GameObject:
   - component: {fileID: 221428724}
   - component: {fileID: 221428723}
   m_Layer: 7
-  m_Name: Mago Maluco
+  m_Name: 'Mago '
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -603,6 +603,7 @@ MonoBehaviour:
   attackRange: 1
   movementLeft: 0
   owner: {fileID: 0}
+  unitName: Mago
   path: []
   inCombatMode: 0
   spriteTransform: {fileID: 0}
@@ -13236,6 +13237,7 @@ MonoBehaviour:
   unitsInCombat: []
   turnOrder: []
   turnOrderIndex: 0
+  combatHUD: {fileID: 1289969839}
 --- !u!4 &1384037005
 Transform:
   m_ObjectHideFlags: 0
@@ -13293,6 +13295,7 @@ MonoBehaviour:
   attackRange: 1
   movementLeft: 0
   owner: {fileID: 0}
+  unitName: Humano
   path: []
   inCombatMode: 0
   spriteTransform: {fileID: 0}

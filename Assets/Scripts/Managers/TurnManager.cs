@@ -34,8 +34,14 @@ public class TurnManager : MonoBehaviour
     public List<Unit> turnOrder = new List<Unit>();
     public int turnOrderIndex = 0;
 
+    [Header("Combat HUD")]
+    public GameObject combatHUD;
+
     private void Start()
     {
+        if (combatHUD != null)
+            combatHUD.SetActive(false);
+
         if (combatManager == null)
             combatManager = FindAnyObjectByType<CombatManager>();
 
@@ -70,6 +76,10 @@ public class TurnManager : MonoBehaviour
 
     public void SetCombatMode(bool enabled)
     {
+        // HUD de combate
+        if (combatHUD != null)
+            combatHUD.SetActive(enabled);
+
         endTurnButton.alpha = enabled ? 1 : 0;
         endTurnButton.interactable = enabled;
 
