@@ -52,7 +52,6 @@ public class GridManager : MonoBehaviour
             {
                 if (u == null) continue;
                 Tile tile = GetTile(u.gridPosition);
-                Debug.Log($"Marcando tile {u.gridPosition} como ocupado por unidade {u.name}");
                 if (tile != null)
                     tile.isOccupied = true;
             }
