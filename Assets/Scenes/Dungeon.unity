@@ -13052,11 +13052,10 @@ MonoBehaviour:
   turnDisplay: {fileID: 360656105}
   bannerText: {fileID: 1317509898}
   turnBanner: {fileID: 1317509896}
-  gridManager: {fileID: 1852550310}
-  tilemapGenerator: {fileID: 0}
-  fadeSpeed: 0.5
   endTurnButton: {fileID: 935053447}
   turnUI: {fileID: 577998374}
+  combatManager: {fileID: 2089718413}
+  fadeSpeed: 0.5
 --- !u!4 &1384037005
 Transform:
   m_ObjectHideFlags: 0
@@ -74145,6 +74144,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2089718412}
   - component: {fileID: 2089718411}
+  - component: {fileID: 2089718413}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -74179,6 +74179,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2089718413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2089718410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d8decbd02fd5e24aaa5a2277b2b7bad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CombatManager
+  gridManager: {fileID: 1852550310}
+  tilemapGenerator: {fileID: 19150262}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
