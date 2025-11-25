@@ -19,6 +19,7 @@ public class Unit : MonoBehaviour, IPointerDownHandler
 
     public Player owner;
     public string unitName;
+    public Sprite portrait;
 
     public List<Tile> path;
 

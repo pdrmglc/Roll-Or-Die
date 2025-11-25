@@ -165,26 +165,29 @@ public class TurnManager : MonoBehaviour
     {
         foreach (var item in uiTurnItems)
             Destroy(item);
+
         uiTurnItems.Clear();
 
         for (int i = 0; i < unitsInOrder.Count; i++)
         {
             Unit unit = unitsInOrder[i];
             GameObject obj = Instantiate(turnOrderItemPrefab, turnOrderPanel);
-            obj.transform.localScale = Vector3.one;
 
-            TextMeshProUGUI text = obj.GetComponentInChildren<TextMeshProUGUI>();
-            text.text = unit.unitName;
+            TurnOrderItemUI ui = obj.GetComponent<TurnOrderItemUI>();
 
-            // lista já está rotacionada, então o primeiro item é o ativo
-            if (i == 0)
-                text.color = Color.yellow;
-            else
-                text.color = Color.white;
+            // seta nome
+            ui.nameText.text = unit.unitName;
+
+            // seta retrato
+            ui.portraitImage.sprite = unit.portrait;
+
+            // highlight
+            ui.nameText.color = (i == turnOrderIndex) ? Color.yellow : Color.white;
 
             uiTurnItems.Add(obj);
         }
     }
+
 
     public void InitializeTurnOrder()
     {

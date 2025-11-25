@@ -604,6 +604,7 @@ MonoBehaviour:
   movementLeft: 0
   owner: {fileID: 0}
   unitName: Mago
+  portrait: {fileID: -2614928803914162140, guid: 5f7857af0e8a100489151104e0f80cee, type: 3}
   path: []
   inCombatMode: 0
   spriteTransform: {fileID: 0}
@@ -10815,7 +10816,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 150, y: 0}
-  m_SizeDelta: {x: 300, y: 0}
+  m_SizeDelta: {x: 300, y: 24}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &994260282
 MonoBehaviour:
@@ -10849,7 +10850,7 @@ MonoBehaviour:
     m_Top: 12
     m_Bottom: 12
   m_ChildAlignment: 0
-  m_Spacing: 8
+  m_Spacing: 15
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
@@ -12880,7 +12881,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1289969840
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13296,6 +13297,7 @@ MonoBehaviour:
   movementLeft: 0
   owner: {fileID: 0}
   unitName: Humano
+  portrait: {fileID: 5120162772620502554, guid: 79b212c236c02e441b576c5a06f02090, type: 3}
   path: []
   inCombatMode: 0
   spriteTransform: {fileID: 0}
