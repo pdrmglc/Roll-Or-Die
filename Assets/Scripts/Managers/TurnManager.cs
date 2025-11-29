@@ -36,10 +36,12 @@ public class TurnManager : MonoBehaviour
 
     [Header("Combat HUD")]
     public GameObject combatHUD;
+    private CanvasGroup actionWindowGroup; 
 
     private void Start()
     {
         if (combatHUD != null)
+            actionWindowGroup = combatHUD.GetComponent<CanvasGroup>();
             combatHUD.SetActive(false);
 
         if (combatManager == null)
@@ -79,6 +81,7 @@ public class TurnManager : MonoBehaviour
         // HUD de combate
         if (combatHUD != null)
             combatHUD.SetActive(enabled);
+            actionWindowGroup.alpha = 1f;
 
         endTurnButton.alpha = enabled ? 1 : 0;
         endTurnButton.interactable = enabled;
