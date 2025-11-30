@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 
@@ -39,13 +40,15 @@ public class Unit : MonoBehaviour, IPointerDownHandler
 
     public CombatHUDController hud;
 
+    private Color _originalColor;
+
 
 
     void Start() {
 
         animator = GetComponentInChildren<Animator>();
 
-        stats = new UnitStats(Random.Range(60, 60), Random.Range(1, 1), Random.Range(40, 40), Random.Range(50, 50));
+        stats = new UnitStats(Random.Range(60, 60), Random.Range(1, 1), Random.Range(40, 40), Random.Range(100, 100));
         movementRange = Mathf.RoundToInt(stats.speed * 0.1f);
         attackRange = Mathf.RoundToInt(stats.perception * 0.05f);
         attackRange = Mathf.Clamp(attackRange, 1, int.MaxValue);
@@ -72,6 +75,10 @@ public class Unit : MonoBehaviour, IPointerDownHandler
             _originalSpriteScaleX = spriteTransform.localScale.x;
         else
             Debug.LogWarning($"Unit {name}: spriteTransform não encontrado. A orientação horizontal não funcionará.");
+
+        // Guarda a cor original do sprite
+        if (_spriteRenderer != null)
+            _originalColor = _spriteRenderer.color;
     }
 
     // Update is called once per frame
@@ -286,11 +293,82 @@ public class Unit : MonoBehaviour, IPointerDownHandler
     public void TakeDamage(int amount)
     {
         health -= amount;
+        
+        // Inicia o efeito de dano
+        StartCoroutine(DamageEffect());
+        
         if(health <= 0)
         {
-            owner.playerUnits.Remove(this);
-            Destroy(gameObject);
+            StartCoroutine(DeathAnimation());
         }
+    }
+
+    private IEnumerator DeathAnimation()
+    {
+        // Desativa movimento e interações
+        inCombatMode = false;
+        
+        if (animator != null)
+        {
+            animator.SetBool("IsWalking", false);
+            // animator.SetTrigger("Death"); // Se tiver uma animação de morte
+        }
+
+        // Rotaciona para ficar deitado (90 graus no eixo Z)
+        float rotationDuration = 0.5f;
+        float elapsed = 0f;
+        Quaternion startRotation = transform.rotation;
+        Quaternion endRotation = startRotation * Quaternion.Euler(0, 0, 90f);
+
+        while (elapsed < rotationDuration)
+        {
+            elapsed += Time.deltaTime;
+            float progress = elapsed / rotationDuration;
+            transform.rotation = Quaternion.Lerp(startRotation, endRotation, progress);
+            yield return null;
+        }
+
+        transform.rotation = endRotation;
+
+        // Espera um pouco deitado
+        // yield return new WaitForSeconds(1f);
+
+        // // Remove da lista de unidades
+        // owner.playerUnits.Remove(this);
+        
+        // // Destrói o GameObject
+        // Destroy(gameObject);
+    }
+
+    private IEnumerator DamageEffect()
+    {
+        float duration = 1f;
+        float elapsed = 0f;
+        Vector3 originalPosition = transform.position;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float progress = elapsed / duration;
+
+            // Fica vermelha
+            if (_spriteRenderer != null)
+            {
+                _spriteRenderer.color = Color.Lerp(Color.red, _originalColor, progress);
+            }
+
+            // Tremida
+            float shake = Mathf.Sin(elapsed * 20f) * 0.05f;
+            transform.position = originalPosition + new Vector3(shake, 0, 0);
+
+            yield return null;
+        }
+
+        // Volta ao normal
+        if (_spriteRenderer != null)
+            _spriteRenderer.color = _originalColor;
+        
+        transform.position = originalPosition;
     }
 
     // Deals damage to target unit
