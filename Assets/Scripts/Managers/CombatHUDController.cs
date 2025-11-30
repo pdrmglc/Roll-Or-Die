@@ -10,6 +10,9 @@ public class CombatHUDController : MonoBehaviour
     public Button moveButton;
     public Button attackButton;
 
+    public bool moveModeActive = false;
+
+
     void Start()
     {
         AddHover(moveButton);
@@ -54,5 +57,14 @@ public class CombatHUDController : MonoBehaviour
         handPointer.pivot = new Vector2(0.5f, 0.5f);
 
         handPointer.anchoredPosition = offset;
+    }
+    public void OnMoveButton()
+    {
+        moveModeActive = !moveModeActive;
+
+        Player p = Player.ActivePlayer;
+
+        foreach (Unit u in p.playerUnits)
+            u.SetHighlight(moveModeActive);
     }
 }

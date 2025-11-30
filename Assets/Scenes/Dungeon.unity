@@ -409,7 +409,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1210206786}
         m_TargetAssemblyTypeName: CombatHUDController, Assembly-CSharp
-        m_MethodName: EnablePointer
+        m_MethodName: OnMoveButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -741,6 +741,7 @@ MonoBehaviour:
   path: []
   inCombatMode: 0
   spriteTransform: {fileID: 0}
+  hud: {fileID: 1210206786}
 --- !u!4 &221428727
 Transform:
   m_ObjectHideFlags: 0
@@ -2890,7 +2891,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1210206786}
         m_TargetAssemblyTypeName: CombatHUDController, Assembly-CSharp
-        m_MethodName: EnablePointer
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -13317,6 +13318,7 @@ MonoBehaviour:
   offset: {x: -40, y: 0}
   moveButton: {fileID: 81501059}
   attackButton: {fileID: 691034390}
+  moveModeActive: 0
 --- !u!1 &1263775680
 GameObject:
   m_ObjectHideFlags: 0
@@ -13903,6 +13905,7 @@ MonoBehaviour:
   path: []
   inCombatMode: 0
   spriteTransform: {fileID: 0}
+  hud: {fileID: 1210206786}
 --- !u!4 &1412953317
 Transform:
   m_ObjectHideFlags: 0
@@ -33978,6 +33981,7 @@ GameObject:
   - component: {fileID: 1819323840}
   - component: {fileID: 1819323839}
   - component: {fileID: 1819323841}
+  - component: {fileID: 1819323842}
   m_Layer: 5
   m_Name: Menu
   m_TagString: Untagged
@@ -34057,6 +34061,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   menuCanvas: {fileID: 1819323837}
+--- !u!225 &1819323842
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1819323837}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1842428708
 GameObject:
   m_ObjectHideFlags: 0

@@ -33,6 +33,9 @@ public class Unit : MonoBehaviour, IPointerDownHandler
 
     private Animator animator;
 
+    public CombatHUDController hud;
+
+
 
     void Start() {
 
@@ -155,32 +158,34 @@ public class Unit : MonoBehaviour, IPointerDownHandler
     }
 
 
-    // public void OnPointerDown(PointerEventData eventData)
-    // {
-    //     if (!inCombatMode) return;
-    //     if (owner != null)
-    //     {
-    //         owner.ChangeSelectUnit(this);
-    //         Debug.Log($"Unit {name} selecionada pelo jogador {owner.playerName}");
+    public void SetHighlight(bool enabled)
+    {
+        // Aqui você liga o que quiser:
+        // - sprite outline
+        // - trocar cor
+        // - mostrar uma borda
+        // - ativar um GameObject filho
+        // - trocar material
+        if (_spriteRenderer != null)
+            _spriteRenderer.color = enabled ? Color.yellow : Color.white;
 
-    //     }
-    //     else
-    //     {
-    //         Debug.LogError("Unit has no owner assigned!"); // Debug log
-    //     }
-    // }
-
+        // Se tiver um GameObject highlight, seria:
+        // highlightObject.SetActive(enabled);
+    }
     public void OnPointerDown(PointerEventData eventData)
     {
         if (!inCombatMode) return;
+        if (!hud.moveModeActive) return;  // só deixa clicar no modo mover
+        if (owner != Player.ActivePlayer) return;
 
-        // 🚫 Não pode selecionar Units que não sejam do jogador ativo
-        if (owner != Player.ActivePlayer)
-        {
-            Debug.Log($"Ignorado: {name} não pertence ao jogador ativo ({Player.ActivePlayer.playerName}).");
-            return;
-        }
+        // Desliga modo mover
+        hud.moveModeActive = false;
 
+        // Remove highlight de todas as units
+        foreach (Unit u in owner.playerUnits)
+            u.SetHighlight(false);
+
+        // Agora sim, seleciona esta Unit
         owner.ChangeSelectUnit(this);
     }
 
