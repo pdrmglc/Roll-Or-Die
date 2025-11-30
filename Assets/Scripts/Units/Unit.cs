@@ -23,6 +23,10 @@ public class Unit : MonoBehaviour, IPointerDownHandler
 
     public List<Tile> path;
 
+    public int maxHealth;
+    public int health;
+    public int attackDamage;
+
     public bool inCombatMode = false;
     private int originalMovementRange;
 
@@ -41,12 +45,16 @@ public class Unit : MonoBehaviour, IPointerDownHandler
 
         animator = GetComponentInChildren<Animator>();
 
-        stats = new UnitStats(Random.Range(60, 60), Random.Range(1, 1));
+        stats = new UnitStats(Random.Range(60, 60), Random.Range(1, 1), Random.Range(40, 40), Random.Range(50, 50));
         movementRange = Mathf.RoundToInt(stats.speed * 0.1f);
         attackRange = Mathf.RoundToInt(stats.perception * 0.05f);
         attackRange = Mathf.Clamp(attackRange, 1, int.MaxValue);
         movementLeft = movementRange;
         originalMovementRange = movementRange;
+
+        maxHealth = 1 + Mathf.RoundToInt(stats.endurance * 0.25f);
+        health = maxHealth;
+        attackDamage = 1 + Mathf.RoundToInt(stats.strength * 0.05f);
 
         // tenta achar SpriteRenderer no filho se não atribuído
         if (spriteTransform == null)
@@ -141,17 +149,26 @@ public class Unit : MonoBehaviour, IPointerDownHandler
                 animator.SetBool("IsWalking", false);
             }
 
-            movementLeft -= path[0].moveCost;
-            path.RemoveAt(0);
-
-            if (path.Count > 0)
+            // Verifica se path tem elementos antes de acessar
+            if (path != null && path.Count > 0)
             {
-                // Continua para o próximo tile no caminho
-                MoveTo(path[0].transform.position, path[0].gridPosition);
+                movementLeft -= path[0].moveCost;
+                path.RemoveAt(0);
+
+                if (path.Count > 0)
+                {
+                    // Continua para o próximo tile no caminho
+                    MoveTo(path[0].transform.position, path[0].gridPosition);
+                }
+                else
+                {
+                    // Terminou o caminho, volta pro controle do jogador
+                    owner.ChangeSelectUnit(this);
+                }
             }
             else
             {
-                // Terminou o caminho, volta pro controle do jogador
+                // Terminou o caminho (ou não tinha), volta pro controle do jogador
                 owner.ChangeSelectUnit(this);
             }
         }
@@ -172,21 +189,120 @@ public class Unit : MonoBehaviour, IPointerDownHandler
         // Se tiver um GameObject highlight, seria:
         // highlightObject.SetActive(enabled);
     }
+    // public void OnPointerDown(PointerEventData eventData)
+    //     {
+    //         if (!inCombatMode) return;
+    //         if (!hud.moveModeActive) return;  // só deixa clicar no modo mover
+    //         if (owner != Player.ActivePlayer) return;
+
+    //         // Desliga modo mover
+    //         hud.moveModeActive = false;
+
+    //         // Remove highlight de todas as units
+    //         foreach (Unit u in owner.playerUnits)
+    //             u.SetHighlight(false);
+
+    //         // Agora sim, seleciona esta Unit
+    //         owner.ChangeSelectUnit(this);
+    //     }
+
     public void OnPointerDown(PointerEventData eventData)
     {
         if (!inCombatMode) return;
-        if (!hud.moveModeActive) return;  // só deixa clicar no modo mover
-        if (owner != Player.ActivePlayer) return;
 
-        // Desliga modo mover
-        hud.moveModeActive = false;
+        Player p = Player.ActivePlayer;
 
-        // Remove highlight de todas as units
-        foreach (Unit u in owner.playerUnits)
-            u.SetHighlight(false);
+        // ============================
+        // 1) Clicar na própria Unit → Selecionar
+        // ============================
+        if (owner == p)
+        {
+            // Só deixa clicar se estiver no modo mover
+            if (!hud.moveModeActive) return;
 
-        // Agora sim, seleciona esta Unit
-        owner.ChangeSelectUnit(this);
+            hud.moveModeActive = false;
+
+            // remove highlight
+            foreach (Unit u in owner.playerUnits)
+                u.SetHighlight(false);
+
+            // seleciona
+            owner.ChangeSelectUnit(this);
+            return;
+        }
+
+        // ============================
+        // 2) Clicar numa Unit inimiga → tentativa de ataque
+        // ============================
+        Unit attacker = p.selectedUnit;
+        Unit target = this;
+
+        // Se não tem atacante selecionado, não faz nada
+        if (!attacker) return;
+
+        // Só ataca se for o turno do jogador (verifica se p é o jogador ativo)
+        if (p != Player.ActivePlayer) return;
+
+        // Pegar tiles
+        Tile targetTile = CombatManager.instance.gridManager.GetTile(target.gridPosition);
+        Tile attackerTile = CombatManager.instance.gridManager.GetTile(attacker.gridPosition);
+
+        // Range check (distância manhattan)
+        int dist = CombatManager.instance.gridManager.GetHeuristic(targetTile, attackerTile);
+        if (dist > attacker.attackRange)
+        {
+            // Fora do range → tenta mover para perto
+            Tile closest = CombatManager.instance.gridManager.GetClosestAttackTile(target, attacker);
+
+            // Se já está parado e não tem caminho → não faz nada
+            if (attacker.path.Count == 0)
+            {
+                attacker.MoveTo(closest.transform.position, closest.gridPosition);
+            }
+            else
+            {
+                // Já está se movendo tentando alcançar
+                attacker.MoveTo(closest.transform.position, closest.gridPosition);
+            }
+
+            return;
+        }
+
+        // ============================
+        // 3) Dentro do range → ataque direto!
+        // ============================
+        attacker.Attack(target);
+    }
+
+
+    // Adds health
+    public void Heal(int amount)
+    {
+        health += amount;
+        if(health > maxHealth) health = maxHealth;
+    }
+
+    // Removes health
+    public void TakeDamage(int amount)
+    {
+        health -= amount;
+        if(health <= 0)
+        {
+            owner.playerUnits.Remove(this);
+            Destroy(gameObject);
+        }
+    }
+
+    // Deals damage to target unit
+    public void Attack(Unit target)
+    {
+        Tile attackerTile = CombatManager.instance.gridManager.GetTile(gridPosition);
+        Tile targetTile = CombatManager.instance.gridManager.GetTile(target.gridPosition);
+
+        if(CombatManager.instance.gridManager.GetHeuristic(attackerTile, targetTile) <= attackRange)
+        {
+            target.TakeDamage(attackDamage);
+        }
     }
 
 }

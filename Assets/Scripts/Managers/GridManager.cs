@@ -502,4 +502,48 @@ public class GridManager : MonoBehaviour
             }
         }
     }
+
+        // Returns the most ideal tile the unit can move to so the enemy will be in range
+    public Tile GetClosestAttackTile(Unit target, Unit attacker)
+    {
+        List<Tile> attackTiles = new List<Tile>();
+        int attackRange = attacker.attackRange;
+
+        // Use tileLookup em vez de map para suportar TilemapGridGenerator
+        foreach(var kv in tileLookup)
+        {
+            Tile tile = kv.Value;
+            if(tile != null && tile.inMoveRange && !tile.isOccupied)
+            {
+                Tile targetTile = GetTile(target.gridPosition);
+                if(targetTile == null) continue;
+
+                int distanceToTarget = GetHeuristic(targetTile, tile);
+
+                if(distanceToTarget <= attackRange)
+                {
+                    attackTiles.Add(tile);
+                }
+            }
+        }
+
+        Tile closestTile = null;
+        float bestDistance = float.MaxValue;
+
+        Tile attackerTile = GetTile(attacker.gridPosition);
+        if(attackerTile == null) return null;
+
+        foreach(Tile tile in attackTiles)
+        {
+            int distanceToAttacker = GetHeuristic(attackerTile, tile);
+
+            if(distanceToAttacker < bestDistance)
+            {
+                closestTile = tile;
+                bestDistance = distanceToAttacker;
+            }
+        }
+
+        return closestTile;
+    }
 }

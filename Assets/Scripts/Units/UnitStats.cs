@@ -5,10 +5,14 @@ public struct UnitStats
 {
     public float speed;
     public float perception;
+    public float endurance;
+    public float strength;
 
-    public UnitStats(float newSpeed, float newPerception)
+    public UnitStats(float newSpeed, float newPerception, float newEndurance, float newStrength)
     {
-        this.speed = newSpeed;
-        this.perception = newPerception;
+        speed = newSpeed;
+        perception = newPerception;
+        endurance = newEndurance;
+        strength = newStrength;
     }
 }

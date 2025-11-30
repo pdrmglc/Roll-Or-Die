@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class CombatManager : MonoBehaviour
 {
+    public static CombatManager instance { get; private set; }
+    
     public GridManager gridManager;
     public TilemapGridGenerator tilemapGenerator;
 
@@ -13,6 +15,11 @@ public class CombatManager : MonoBehaviour
 
     void Start()
     {
+        if (instance == null)
+            instance = this;
+        else
+            Destroy(gameObject);
+
         if (gridManager == null)
             gridManager = FindAnyObjectByType<GridManager>();
 
