@@ -732,6 +732,9 @@ MonoBehaviour:
   stats:
     speed: 0
     perception: 0
+    endurance: 0
+    strength: 0
+    mana: 0
   movementRange: 3
   attackRange: 1
   movementLeft: 0
@@ -739,9 +742,16 @@ MonoBehaviour:
   unitName: Mago
   portrait: {fileID: -2614928803914162140, guid: 5f7857af0e8a100489151104e0f80cee, type: 3}
   path: []
+  maxHealth: 0
+  health: 0
+  attackDamage: 0
+  mana: 0
   inCombatMode: 0
   spriteTransform: {fileID: 0}
   hud: {fileID: 1210206786}
+  abilities:
+  - {fileID: 11400000, guid: ce3b2f43060ae194dbff618eedf92dfe, type: 2}
+  selectedAbility: {fileID: 0}
 --- !u!4 &221428727
 Transform:
   m_ObjectHideFlags: 0
@@ -750,13 +760,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 221428722}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1061327846}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 767238355}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &234836249
 GameObject:
@@ -10612,7 +10622,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Player
   playerName: NPC
   selectedUnit: {fileID: 0}
-  turnManager: {fileID: 1384037004}
   playerUnits:
   - {fileID: 221428726}
 --- !u!4 &767238355
@@ -10623,12 +10632,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 767238353}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 5.62577, y: -6.7799, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
+  m_Children:
+  - {fileID: 221428727}
+  m_Father: {fileID: 1256736141}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &771756924
 GameObject:
@@ -11520,7 +11530,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Player
   playerName: Jogador 1
   selectedUnit: {fileID: 0}
-  turnManager: {fileID: 1384037004}
   playerUnits:
   - {fileID: 1412953316}
 --- !u!4 &1107597747
@@ -11531,12 +11540,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1107597745}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 5.62577, y: -6.7799, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
+  m_Children:
+  - {fileID: 1412953317}
+  m_Father: {fileID: 1256736141}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1134339538
 GameObject:
@@ -13319,6 +13329,41 @@ MonoBehaviour:
   moveButton: {fileID: 81501059}
   attackButton: {fileID: 691034390}
   moveModeActive: 0
+  abilitiesPanel: {fileID: 0}
+  abilityButtonPrefab: {fileID: 0}
+--- !u!1 &1256736140
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1256736141}
+  m_Layer: 0
+  m_Name: ListaJogadores
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1256736141
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1256736140}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.62577, y: 6.7799, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1107597747}
+  - {fileID: 767238355}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1263775680
 GameObject:
   m_ObjectHideFlags: 0
@@ -13896,6 +13941,9 @@ MonoBehaviour:
   stats:
     speed: 0
     perception: 0
+    endurance: 0
+    strength: 0
+    mana: 0
   movementRange: 3
   attackRange: 1
   movementLeft: 0
@@ -13903,9 +13951,16 @@ MonoBehaviour:
   unitName: Humano
   portrait: {fileID: 5120162772620502554, guid: 79b212c236c02e441b576c5a06f02090, type: 3}
   path: []
+  maxHealth: 0
+  health: 0
+  attackDamage: 0
+  mana: 0
   inCombatMode: 0
   spriteTransform: {fileID: 0}
   hud: {fileID: 1210206786}
+  abilities:
+  - {fileID: 11400000, guid: 7519a0453431edc4f9d1afddad8d46e2, type: 2}
+  selectedAbility: {fileID: 0}
 --- !u!4 &1412953317
 Transform:
   m_ObjectHideFlags: 0
@@ -13914,13 +13969,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1412953315}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -6.52, y: 7.05, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1194231392}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1107597747}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &1412953319
 Rigidbody2D:
@@ -75216,12 +75271,9 @@ SceneRoots:
   - {fileID: 706532677}
   - {fileID: 1852550311}
   - {fileID: 1581004262}
-  - {fileID: 1107597747}
-  - {fileID: 767238355}
-  - {fileID: 1412953317}
-  - {fileID: 221428727}
   - {fileID: 1384037005}
   - {fileID: 1812117737}
   - {fileID: 19150261}
   - {fileID: 1976252983}
   - {fileID: 2089718412}
+  - {fileID: 1256736141}
