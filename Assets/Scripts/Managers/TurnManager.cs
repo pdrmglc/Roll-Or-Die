@@ -231,7 +231,7 @@ public class TurnManager : MonoBehaviour
         // Força a inicialização se ainda não foi feita
         if (players == null || players.Length == 0)
         {
-            players = FindObjectsOfType<Player>();
+            players = FindObjectsByType<Player>(FindObjectsSortMode.None);
         }
         
         // DontDestroyOnLoad(gameObject);
