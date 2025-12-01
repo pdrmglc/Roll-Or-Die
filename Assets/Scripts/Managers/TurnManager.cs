@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public class TurnManager : MonoBehaviour
 {
+    // ✅ Singleton estático
+    public static TurnManager instance { get; private set; }
+    
     [Header("Players")]
     public Player[] players;
     public int activePlayerIndex = 0;
@@ -211,6 +214,27 @@ public class TurnManager : MonoBehaviour
 
         // Atualiza HUD
         UpdateTurnOrderUI(turnOrder);
+    }
+
+    void Awake()
+    {
+        // Se já existe uma instância, destroi esta
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        // Se não existe, salva esta como a instância
+        instance = this;
+        
+        // Força a inicialização se ainda não foi feita
+        if (players == null || players.Length == 0)
+        {
+            players = FindObjectsOfType<Player>();
+        }
+        
+        // DontDestroyOnLoad(gameObject);
     }
 
 }

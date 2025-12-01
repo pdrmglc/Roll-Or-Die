@@ -12,6 +12,9 @@ public class CombatHUDController : MonoBehaviour
 
     public bool moveModeActive = false;
 
+    public Transform abilitiesPanel;     // onde os botões serão criados
+    public GameObject abilityButtonPrefab; // um botão básico do Unity
+
 
     void Start()
     {
@@ -66,5 +69,28 @@ public class CombatHUDController : MonoBehaviour
 
         foreach (Unit u in p.playerUnits)
             u.SetHighlight(moveModeActive);
+    }
+
+    public void ShowAbilities(Unit unit)
+    {
+        // limpa botões antigos
+        foreach (Transform child in abilitiesPanel)
+            Destroy(child.gameObject);
+
+        // cria novos botões
+        foreach (AbilityData ab in unit.abilities)
+        {
+            GameObject btnObj = Instantiate(abilityButtonPrefab, abilitiesPanel);
+            Button btn = btnObj.GetComponent<Button>();
+            Text txt = btnObj.GetComponentInChildren<Text>();
+
+            txt.text = ab.abilityName;
+
+            btn.onClick.AddListener(() =>
+            {
+                unit.selectedAbility = ab;
+                Debug.Log(unit.name + " escolheu " + ab.abilityName);
+            });
+        }
     }
 }

@@ -8,11 +8,14 @@ public struct UnitStats
     public float endurance;
     public float strength;
 
-    public UnitStats(float newSpeed, float newPerception, float newEndurance, float newStrength)
+    public float mana;
+
+    public UnitStats(float newSpeed, float newPerception, float newEndurance, float newStrength, float newMana)
     {
         speed = newSpeed;
         perception = newPerception;
         endurance = newEndurance;
         strength = newStrength;
+        mana = newMana;
     }
 }

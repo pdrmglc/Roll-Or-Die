@@ -5,8 +5,6 @@ public class Player : MonoBehaviour
 {
     public string playerName;
     public Unit selectedUnit;
-    public TurnManager turnManager;
-
     public List<Unit> playerUnits;
 
     private bool inCombatMode = false;
@@ -30,8 +28,27 @@ public class Player : MonoBehaviour
     {
         get
         {
-            TurnManager tm = FindAnyObjectByType<TurnManager>();
-            return tm.players[tm.activePlayerIndex];
+            // Se TurnManager não foi inicializado, procura na cena
+            if (TurnManager.instance == null)
+            {
+                TurnManager tm = FindAnyObjectByType<TurnManager>();
+                if (tm == null)
+                {
+                    Debug.LogError("TurnManager não encontrado na cena!");
+                    return null;
+                }
+            }
+
+            // Retorna o jogador ativo de forma segura
+            if (TurnManager.instance.players == null || 
+                TurnManager.instance.activePlayerIndex < 0 || 
+                TurnManager.instance.activePlayerIndex >= TurnManager.instance.players.Length)
+            {
+                Debug.LogError("Índice de jogador inválido!");
+                return null;
+            }
+
+            return TurnManager.instance.players[TurnManager.instance.activePlayerIndex];
         }
     }
     
@@ -58,13 +75,19 @@ public class Player : MonoBehaviour
                 selectedUnit = playerUnits[0];
 
             // Informa ao TurnManager que entrou no combate
-            turnManager.SetCombatMode(true);
-            turnManager.ShowTurnBanner();
+            if (TurnManager.instance != null)
+            {
+                TurnManager.instance.SetCombatMode(true);
+                TurnManager.instance.ShowTurnBanner();
+            }
         }
         else
         {
             // Saiu do combate → deixa turno sem seleção
-            turnManager.SetCombatMode(false);
+            if (TurnManager.instance != null)
+            {
+                TurnManager.instance.SetCombatMode(false);
+            }
             selectedUnit = null;
         }
     }
@@ -75,10 +98,10 @@ public class Player : MonoBehaviour
         // Atualiza seleção local
         selectedUnit = unit;
 
-        // Delega o trabalho de destacar ao TurnManager (que controla o grid)
-        if (turnManager != null)
+        // Use o singleton em vez da referência
+        if (TurnManager.instance != null)
         {
-            turnManager.OnUnitSelected(this, unit);
+            TurnManager.instance.OnUnitSelected(this, unit);
         }
     }
 

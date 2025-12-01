@@ -27,6 +27,7 @@ public class Unit : MonoBehaviour, IPointerDownHandler
     public int maxHealth;
     public int health;
     public int attackDamage;
+    public int mana;
 
     public bool inCombatMode = false;
     private int originalMovementRange;
@@ -42,13 +43,18 @@ public class Unit : MonoBehaviour, IPointerDownHandler
 
     private Color _originalColor;
 
+    public List<AbilityData> abilities = new List<AbilityData>();
+
+    [HideInInspector] 
+    public AbilityData selectedAbility;
+
 
 
     void Start() {
 
         animator = GetComponentInChildren<Animator>();
 
-        stats = new UnitStats(Random.Range(60, 60), Random.Range(1, 1), Random.Range(40, 40), Random.Range(100, 100));
+        stats = new UnitStats(Random.Range(60, 60), Random.Range(1, 1), Random.Range(40, 40), Random.Range(100, 100), Random.Range(50, 50));
         movementRange = Mathf.RoundToInt(stats.speed * 0.1f);
         attackRange = Mathf.RoundToInt(stats.perception * 0.05f);
         attackRange = Mathf.Clamp(attackRange, 1, int.MaxValue);
@@ -58,6 +64,7 @@ public class Unit : MonoBehaviour, IPointerDownHandler
         maxHealth = 1 + Mathf.RoundToInt(stats.endurance * 0.25f);
         health = maxHealth;
         attackDamage = 1 + Mathf.RoundToInt(stats.strength * 0.05f);
+        mana = Mathf.RoundToInt(stats.mana);
 
         // tenta achar SpriteRenderer no filho se não atribuído
         if (spriteTransform == null)
@@ -196,22 +203,6 @@ public class Unit : MonoBehaviour, IPointerDownHandler
         // Se tiver um GameObject highlight, seria:
         // highlightObject.SetActive(enabled);
     }
-    // public void OnPointerDown(PointerEventData eventData)
-    //     {
-    //         if (!inCombatMode) return;
-    //         if (!hud.moveModeActive) return;  // só deixa clicar no modo mover
-    //         if (owner != Player.ActivePlayer) return;
-
-    //         // Desliga modo mover
-    //         hud.moveModeActive = false;
-
-    //         // Remove highlight de todas as units
-    //         foreach (Unit u in owner.playerUnits)
-    //             u.SetHighlight(false);
-
-    //         // Agora sim, seleciona esta Unit
-    //         owner.ChangeSelectUnit(this);
-    //     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
