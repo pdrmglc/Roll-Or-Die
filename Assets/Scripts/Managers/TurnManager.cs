@@ -111,9 +111,12 @@ public class TurnManager : MonoBehaviour
     //  TURNOS
     // ===================================================================
 
+    // Quando o botão "End Turn" é pressionado, a seguinte função é chamada:
     public void EndTurn()
     {
         // reseta unidades do jogador atual
+        // no futuro, cada unit terá turno próprio, então o reset deverá ser por unit e não para todas
+        // Provavelmente, passando o index da unit atual
         ActivePlayer.ResetUnits();
 
         // avança para a próxima unidade na ordem de turno
@@ -229,6 +232,8 @@ public class TurnManager : MonoBehaviour
         instance = this;
         
         // Força a inicialização se ainda não foi feita
+        // No futuro, isso deve ser feito pelo Dungeon Master manualmente. De preferência com
+        // Uma ferramenta de seleção de players.
         if (players == null || players.Length == 0)
         {
             players = FindObjectsByType<Player>(FindObjectsSortMode.None);
