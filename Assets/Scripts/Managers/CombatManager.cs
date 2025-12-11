@@ -27,6 +27,52 @@ public class CombatManager : MonoBehaviour
             tilemapGenerator = FindAnyObjectByType<TilemapGridGenerator>();
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            ToggleCombatMode();
+        }   
+    }
+
+    private void ToggleCombatMode()
+    {
+        // Alterna o modo
+        InCombat = !InCombat;
+
+        // Atualiza TODAS as Units do Player
+        foreach (Unit unit in allUnits)
+        {
+            unit.SetCombatMode(InCombat);
+
+            // Habilita/desabilita PlayerMovement (movimento livre)
+            PlayerMovement pm = unit.GetComponent<PlayerMovement>();
+            if (pm != null)
+                pm.canMove = !InCombat;
+        }
+
+        // Garante que existe uma selectedUnit quando entrar no combate
+        if (InCombat)
+        {
+
+            // Informa ao TurnManager que entrou no combate
+            if (TurnManager.instance != null)
+            {
+                TurnManager.instance.SetCombatMode(true);
+                TurnManager.instance.ShowTurnBanner();
+            }
+        }
+        else
+        {
+            // Saiu do combate → deixa turno sem seleção
+            if (TurnManager.instance != null)
+            {
+                TurnManager.instance.SetCombatMode(false);
+            }
+        }
+    }
+
+
     // ============================================================
     //  Inicialização do combate
     // ============================================================
@@ -81,8 +127,6 @@ public class CombatManager : MonoBehaviour
         // Recalcular ocupações
         gridManager.RecalculateTileOccupations(allUnits);
 
-        // Highlights
-        UpdateHighlights(unit);
     }
 
     public void ExitCombat()

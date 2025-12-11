@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
     public Unit selectedUnit;
     public List<Unit> playerUnits;
 
-    private bool inCombatMode = false;
+    // private bool inCombatMode = false;
 
     void Start()
     {
@@ -17,13 +17,6 @@ public class Player : MonoBehaviour
             }
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            ToggleCombatMode();
-        }
-    }
     public static Player ActivePlayer
     {
         get
@@ -52,46 +45,6 @@ public class Player : MonoBehaviour
         }
     }
     
-    private void ToggleCombatMode()
-    {
-        // Alterna o modo
-        inCombatMode = !inCombatMode;
-
-        // Atualiza TODAS as Units do Player
-        foreach (Unit unit in playerUnits)
-        {
-            unit.SetCombatMode(inCombatMode);
-
-            // Habilita/desabilita PlayerMovement (movimento livre)
-            PlayerMovement pm = unit.GetComponent<PlayerMovement>();
-            if (pm != null)
-                pm.canMove = !inCombatMode;
-        }
-
-        // Garante que existe uma selectedUnit quando entrar no combate
-        if (inCombatMode)
-        {
-            if (selectedUnit == null && playerUnits.Count > 0)
-                selectedUnit = playerUnits[0];
-
-            // Informa ao TurnManager que entrou no combate
-            if (TurnManager.instance != null)
-            {
-                TurnManager.instance.SetCombatMode(true);
-                TurnManager.instance.ShowTurnBanner();
-            }
-        }
-        else
-        {
-            // Saiu do combate → deixa turno sem seleção
-            if (TurnManager.instance != null)
-            {
-                TurnManager.instance.SetCombatMode(false);
-            }
-            selectedUnit = null;
-        }
-    }
-
 
     public void ChangeSelectUnit(Unit unit)
     {
